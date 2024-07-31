@@ -10,5 +10,17 @@
   },
   "about.qmd": {
     "about.html": "54065b54"
+  },
+  "InterviewPrep.ipynb": {
+    "InterviewPrep.html": "8ecc6f26"
+  },
+  "notebooks/InterviewPrep.ipynb": {
+    "InterviewPrep.html": "dc6f5a30"
+  },
+  "posts/interview-prep/InterviewPrep.ipynb": {
+    "InterviewPrep.html": "db61c0be"
+  },
+  "posts/interview-prep/InterviewPrep.qmd": {
+    "InterviewPrep.html": "76f2e77a"
   }
 }
