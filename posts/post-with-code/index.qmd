@@ -1,9 +1,9 @@
 ---
 title: "Post With Code"
-author: "Harlow Malloc"
+author: "Basar C."
 date: "2024-07-31"
-categories: [news, code, analysis]
-image: "image.jpg"
+categories: [news, code, swe design]
+image: "sweblogs.png"
 ---
 
 This is a post with executable code.
