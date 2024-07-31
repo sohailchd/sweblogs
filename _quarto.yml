@@ -1,19 +1,45 @@
 project:
   type: website
-
+  output-dir: docs
+execute:
+  freeze: true
 website:
-  title: "sweblogs"
+  google-analytics: "G-1S2DDJMWQ6"
+  title: "Basar Sohail Chowdhury"
+  favicon: favicon/favicon-32x32.png
+  open-graph:
+    locale: en_US
+  twitter-card:
+    image: street.jpg
+    card-style: summary
+    creator: "@isaac_flath"
+  site-url: https://isaac-flath.tech/
+  description: "Blog for software engineering and data science"
   navbar:
     right:
-      - about.qmd
+      - text: "About Me"
+        file: about.qmd
+      - text: "Blog"
+        file: index.qmd
+  page-footer: 
+    left: "Basar Sohail Chowdhury" 
+    right: 
+      - icon: linkedin
+        text: LinkedIn
+        href: https://www.linkedin.com/in/sohailchd/
       - icon: github
-        href: https://github.com/
+        text: Github
+        href: https://github.com/sohailchd
       - icon: twitter
-        href: https://twitter.com
+        text: Twitter
+        href: https://twitter.com/sohail_twt
+      - icon: rss
+        text: Blog RSS
+        href: blog.xml
 format:
   html:
-    theme: cosmo
     css: styles.css
-
-
+    theme: 
+      light: cosmo
+      dark: cyborg
 
