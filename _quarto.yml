@@ -12,8 +12,8 @@ website:
   twitter-card:
     image: street.jpg
     card-style: summary
-    creator: "@isaac_flath"
-  site-url: https://isaac-flath.tech/
+    creator: "@sohailchd"
+  site-url: https://sohailchd.github.io/sweblogs/
   description: "Blog for software engineering and data science"
   navbar:
     right:

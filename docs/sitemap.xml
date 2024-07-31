@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://isaac-flath.tech/about.html</loc>
+    <loc>https://sohailchd.github.io/sweblogs/about.html</loc>
     <lastmod>2024-07-31T23:11:55.292Z</lastmod>
   </url>
   <url>
-    <loc>https://isaac-flath.tech/posts/interview-prep/InterviewPrep.html</loc>
+    <loc>https://sohailchd.github.io/sweblogs/posts/interview-prep/InterviewPrep.html</loc>
     <lastmod>2024-07-31T18:25:14.100Z</lastmod>
   </url>
   <url>
-    <loc>https://isaac-flath.tech/posts/post-with-code/index.html</loc>
+    <loc>https://sohailchd.github.io/sweblogs/posts/tensor-flow/beginner.html</loc>
+    <lastmod>2024-07-31T23:26:17.453Z</lastmod>
+  </url>
+  <url>
+    <loc>https://sohailchd.github.io/sweblogs/posts/post-with-code/index.html</loc>
     <lastmod>2024-07-31T16:38:17.636Z</lastmod>
   </url>
   <url>
-    <loc>https://isaac-flath.tech/posts/welcome/index.html</loc>
+    <loc>https://sohailchd.github.io/sweblogs/posts/welcome/index.html</loc>
     <lastmod>2024-07-31T16:11:29.202Z</lastmod>
   </url>
   <url>
-    <loc>https://isaac-flath.tech/index.html</loc>
+    <loc>https://sohailchd.github.io/sweblogs/index.html</loc>
     <lastmod>2024-07-31T16:11:29.200Z</lastmod>
   </url>
 </urlset>

@@ -6,7 +6,9 @@
     "index.html": "15a9beae"
   },
   "index.qmd": {
-    "index.html": "39a92cb2"
+    "index.html": "39a92cb2",
+    "begineer.qmd": "83bae682",
+    "qmd": "6dc5b712"
   },
   "about.qmd": {
     "about.html": "54065b54"
@@ -22,5 +24,11 @@
   },
   "posts/interview-prep/InterviewPrep.qmd": {
     "InterviewPrep.html": "76f2e77a"
+  },
+  "posts/tensor-flow/beginner.ipynb": {
+    "beginner.html": "d88b256d",
+    "begineer.qmd": "a958f53b",
+    "qmd": "054182d0",
+    "..": "75f30c27"
   }
 }
