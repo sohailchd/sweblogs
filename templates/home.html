@@ -1,0 +1,117 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <javascript>
+        console.log("hello");
+        document.getElementById("publishForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            fetch("/publish", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });        
+    </javascript>
+</head>
+<body>
+    <h1>SWEBlogs!</h1>
+    <p>Upload blogs.</p>
+
+    <form id="publishForm">
+        <label for="notebookUrl">Google Colab Notebook URL:</label><br>
+        <input type="text" id="notebookUrl" name="notebookUrl" required><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="filename" name="filename" required><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="author">Author:</label><br>
+        <input type="text" id="author" name="author" required><br>
+        <label for="tags">Tags (comma-separated):</label><br>
+        <input type="text" id="tags" name="tags"><br>
+        <button type="submit">Publish to Quarto</button>
+    </form>
+    
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Material Form</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/12.0.0/material-components-web.min.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/material-components-web/12.0.0/material-components-web.min.js"></script>
+    <style>
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .mdc-button {
+            width: 100%;
+        }
+        .mdc-text-field {
+            width: 100%;
+        }
+        .mdc-text-field + .mdc-text-field {
+            margin-top: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mdc-card">
+        <h2 class="mdc-typography--headline4">Publish Google Colab Notebook</h2>
+        <form action="{{ url_for('publish') }}" method="POST" id="publishForm">
+            <div class="mdc-text-field mdc-text-field--outlined">
+                <input type="text" id="notebookUrl" name="notebookUrl" class="mdc-text-field__input" required>
+                <label class="mdc-floating-label" for="notebookUrl">Google Colab Notebook URL</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            <br>
+            <div class="mdc-text-field mdc-text-field--outlined">
+                <input type="text" id="title" name="title" class="mdc-text-field__input" required>
+                <label class="mdc-floating-label" for="title">Title</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            <br>
+            <div class="mdc-text-field mdc-text-field--outlined">
+                <input type="text" id="author" name="author" class="mdc-text-field__input" required>
+                <label class="mdc-floating-label" for="author">Author</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            <br>
+            <div class="mdc-text-field mdc-text-field--outlined">
+                <input type="text" id="tags" name="tags" class="mdc-text-field__input">
+                <label class="mdc-floating-label" for="tags">Tags (comma-separated)</label>
+                <div class="mdc-line-ripple"></div>
+            </div>
+            <br>
+            <button class="mdc-button mdc-button--raised" type="submit">
+                <span class="mdc-button__label">Publish to Quarto</span>
+            </button>
+        </form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

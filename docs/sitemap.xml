@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://sohailchd.github.io/sweblogs/about.html</loc>
-    <lastmod>2024-07-31T23:11:55.292Z</lastmod>
+    <loc>https://sohailchd.github.io/sweblogs/downloaded/TestApp.html</loc>
+    <lastmod>2024-08-02T06:17:13.589Z</lastmod>
+  </url>
+  <url>
+    <loc>https://sohailchd.github.io/sweblogs/index.html</loc>
+    <lastmod>2024-07-31T16:11:29.200Z</lastmod>
   </url>
   <url>
     <loc>https://sohailchd.github.io/sweblogs/posts/interview-prep/InterviewPrep.html</loc>
     <lastmod>2024-07-31T18:25:14.100Z</lastmod>
   </url>
   <url>
-    <loc>https://sohailchd.github.io/sweblogs/posts/tensor-flow/beginner.html</loc>
-    <lastmod>2024-07-31T23:26:17.453Z</lastmod>
+    <loc>https://sohailchd.github.io/sweblogs/posts/TestApp/TestApp.html</loc>
+    <lastmod>2024-08-02T06:17:14.144Z</lastmod>
   </url>
   <url>
     <loc>https://sohailchd.github.io/sweblogs/posts/post-with-code/index.html</loc>
     <lastmod>2024-07-31T16:38:17.636Z</lastmod>
   </url>
   <url>
+    <loc>https://sohailchd.github.io/sweblogs/posts/tensor-flow/beginner.html</loc>
+    <lastmod>2024-08-01T00:06:12.900Z</lastmod>
+  </url>
+  <url>
     <loc>https://sohailchd.github.io/sweblogs/posts/welcome/index.html</loc>
     <lastmod>2024-07-31T16:11:29.202Z</lastmod>
   </url>
   <url>
-    <loc>https://sohailchd.github.io/sweblogs/index.html</loc>
-    <lastmod>2024-07-31T16:11:29.200Z</lastmod>
+    <loc>https://sohailchd.github.io/sweblogs/posts/interview-prep/interview-prep.html</loc>
+    <lastmod>2024-08-01T00:18:59.249Z</lastmod>
+  </url>
+  <url>
+    <loc>https://sohailchd.github.io/sweblogs/about.html</loc>
+    <lastmod>2024-07-31T23:11:55.292Z</lastmod>
   </url>
 </urlset>

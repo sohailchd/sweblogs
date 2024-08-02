@@ -1,0 +1,4119 @@
+---
+jupyter: python3
+title: "Tensorflow example"
+author: "Basar C."
+date: "2024-07-31"
+categories: [code, AI/ML]
+image: "sweblogs.png"
+---
+
+
+
+### Binary Search
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def BinarySearchRecursive(nlist, target, low, high):
+  if (len(nlist) == 0) or (low == high):
+    return
+
+  mid = (low+high)//2
+  if nlist[mid] == target:
+    return mid
+  elif nlist[mid] > target:
+    return BinarySearchRecursive(nlist, target, low, mid-1)
+  else:
+    return BinarySearchRecursive(nlist, target, mid+1, high)
+  return None
+
+
+nlist = [1,2,3, 4, 6, 7, 9, 10, 12, 13, 14]
+BinarySearchRecursive(nlist, 3, 0, len(nlist)-1) == 2
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def BinarySearch(nlist, x):
+  if len(nlist) == 0: return None
+  low, high = 0, len(nlist)
+  while low <= high:
+    mid = (low+high)//2
+    if nlist[mid] == x:
+      return mid
+    elif x < nlist[mid]:
+      high = mid-1
+    else:
+      low = mid+1
+  return None
+
+x = BinarySearch(nlist, 3) == BinarySearchRecursive(nlist, 3, 0, len(nlist)-1)
+y = BinarySearch([1,3,3], 3)
+z = BinarySearch([1,2,4,8,13], 8)
+print(x, y, z)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+10//2
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+9//2
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def contains_unique(nums):
+    xor_result = 0
+    for num in nums:
+        xor_result ^= num
+    print(xor_result)
+    return xor_result != 0
+
+
+array = [1, 2, 2, 3, 3, 4, 4, 5]
+contains_dup = contains_unique(array)
+print(f"The array contains uinque element: {contains_dup}")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+N = 20
+while N:
+  t = N
+  t1 = N-1
+  N = t & t1
+  print(bin(t), bin(t1), bin(N))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import math
+a = -1 %  10
+print(a)
+digit = int(math.fmod(-1, 10))
+print(digit)
+
+x = int(-1 / 10)
+print(x)
+```
+
+### Power
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def power(x, n):
+  def helper(a, p):
+    if p==0: return 1
+    if p%2==0:
+      return helper(a, p//2)**2
+    return helper(a, p-1) * a
+  return helper(x, n)
+
+
+power(2,3)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def power(base, exponent):
+    if exponent == 0:
+        return 1
+    elif exponent % 2 == 0:
+        half_power = power(base, exponent // 2)
+        return half_power * half_power
+    else:
+        return base * power(base, exponent - 1)
+
+power(2, 3)
+```
+
+### Permutations
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def permutate(elements):
+  def helper(pos, res, available):
+    if pos == len(elements):
+      print(res)
+      return
+
+    for i in range(0, len(elements)):
+      if available[i]:
+        res[pos] = elements[i]
+        available[i] = False
+        helper(pos+1, res, available)
+        available[i] = True
+  N = len(elements)
+  avl = [True] * N
+  res = [""] * N
+  return helper(0, res, avl)
+
+permutate("MARTY")
+```
+
+### Next permutation
+
+
+### Heap Implementation
+
+
+
+```{python}
+class MinHeap:
+    def __init__(self):
+        self.heap = []
+
+    def parent(self, i):
+        return (i - 1) // 2
+
+    def left_child(self, i):
+        return 2 * i + 1
+
+    def right_child(self, i):
+        return 2 * i + 2
+
+    def has_left_child(self, i):
+        return self.left_child(i) < len(self.heap)
+
+    def has_right_child(self, i):
+        return self.right_child(i) < len(self.heap)
+
+    def swap(self, i, j):
+        self.heap[i], self.heap[j] = self.heap[j], self.heap[i]
+
+    def heapify_up(self, i):
+        while i > 0 and self.heap[i] < self.heap[self.parent(i)]:
+            parent_index = self.parent(i)
+            self.swap(i, parent_index)
+            i = parent_index
+
+    def heapify_down(self, i):
+        while self.has_left_child(i):
+            smallest_child_index = self.left_child(i)
+            if self.has_right_child(i) and self.heap[self.right_child(i)] < self.heap[smallest_child_index]:
+                smallest_child_index = self.right_child(i)
+
+            if self.heap[i] <= self.heap[smallest_child_index]:
+                break
+
+            self.swap(i, smallest_child_index)
+            i = smallest_child_index
+
+    def push(self, value):
+        self.heap.append(value)
+        self.heapify_up(len(self.heap) - 1)
+
+    def pop(self):
+        if not self.heap:
+            raise IndexError("Heap is empty")
+
+        if len(self.heap) == 1:
+            return self.heap.pop()
+
+        root = self.heap[0]
+        self.heap[0] = self.heap.pop()
+        self.heapify_down(0)
+        return root
+
+    def peek(self):
+        if not self.heap:
+            raise IndexError("Heap is empty")
+
+        return self.heap[0]
+
+    def is_empty(self):
+        return len(self.heap) == 0
+```
+
+### Partition around pivot
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import random
+def partition_pivot(pvIndx, arr):
+  l, r = 0, len(arr)-1
+
+  pvalue = arr[pvIndx]
+  ## swap the pivot with the right
+  arr[pvIndx], arr[r] = arr[r], arr[pvIndx]
+  newIndx = l
+
+  for i in range(l, r):
+    if arr[i] <= pvalue:
+      arr[newIndx], arr[i] = arr[i], arr[newIndx]
+      newIndx += 1
+  arr[r], arr[newIndx] = arr[newIndx], arr[r]
+  return arr, newIndx
+
+
+def test():
+  alist = [ random.randint(0, 1000) for _ in range(10) ]
+  rnd = random.randint(0, len(alist)-1)
+  print(alist)
+  print("random value: ", alist[rnd], ", random index: ", rnd)
+  pa, idx = partition_pivot(rnd, alist)
+  assert (max(pa[:idx]) < pa[idx]) if pa[:idx] != [] else True
+  assert min(pa[idx+1:]) > pa[idx] if pa[idx+1:] != [] else True
+  print("new: ", pa, "indx: ", idx)
+
+for i in range(5):
+  test()
+  print("--------------------")
+
+```
+
+### Dutch National Flag
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+### there are 3 variations of the number, arrange them accordingly 00, 11111, 2222
+
+def dutch_national_flag(arr):
+  zp, cp, tp = 0, 0, len(arr)-1 ### zero's pointer, current pointer, two's pointer
+  while cp <= tp:
+    if arr[cp] == 0:
+      arr[zp], arr[cp] = arr[cp], arr[zp]
+      cp += 1
+      zp += 1
+    elif arr[cp] == 2:
+      arr[tp], arr[cp] = arr[cp], arr[tp]
+      tp -= 1
+    else:
+      cp += 1
+  return arr
+
+arr = [2,1,2,1,2,1,0,2,0,0,0]
+dutch_national_flag(arr)
+print(arr)
+
+```
+
+### Python For-Else block
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def for_else_loop(nums):
+
+  for i in nums:
+    if i == 9:
+      print("nine found")
+      break
+    print(i)
+  else:
+    print("no nine found")
+
+
+a = [1,2,9,3,4,5, 9]
+for_else_loop(a)
+```
+
+### Minimum steps required to reach the end of the array
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def reach_end(steps):
+  N = len(steps)
+
+  def helper(cp):
+    if cp >= N-1:
+      return 0
+    maxStepFromHere = steps[cp]
+    minStep = float("inf")
+
+    ## try all the possibilities
+    while maxStepFromHere:
+      minStep = min(minStep, helper(cp + maxStepFromHere))
+      maxStepFromHere -= 1
+
+    return minStep
+
+  return helper(0)
+
+
+reach_end([3,3,1,0,2,0,1])
+
+```
+
+### Closure
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+inc_by_i = [lambda x : x+i for i in range(10) ]
+
+print(inc_by_i[3](4))
+```
+
+### Python OR
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+a = 1
+b = None
+c = a or b
+print(c)
+```
+
+### Parit check
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def parity(n):
+  r = 0
+  while n:
+    r ^= (n & 1)
+    n >>= 1
+  return r
+
+a, b, c, = parity(1), parity(2), parity(3)
+print(a, b, c)
+print(bin(3))
+```
+
+# CTCI
+
+### Arrays
+
+##### Increment By One
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def increment_by_one(nums):
+  nums[-1] += 1
+  for i in reversed(range(1, len(nums))):
+    if nums[i] != 10:
+      break
+    nums[i] = 0
+    nums[i-1] += 1
+    print(i, nums[i], nums[i-1])
+  # else:
+  #   print("here")
+  #   if nums[0] == 10:
+  #     nums[0] = 1
+  #     nums.append(0)
+  # return nums
+  if nums[0] == 10:
+    nums[0] = 1
+    nums.append(0)
+  return nums
+
+increment_by_one([0, 2, 9])
+```
+
+##### Buy and sell stock once
+
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def buy_and_sell_once(prices):
+  minp, maxp = float("inf"), 0
+  for cp in prices:
+    cprice = cp - minp
+    maxp = max(maxp, cprice)
+    minp = min(cp, minp)
+  return maxp
+
+for i in [[7,1,5,3,6,4], [7,6,4,3,1]]:
+  print(buy_and_sell_once(i))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def buy_and_sell_multiple_n_times(prices, n):
+  memo = {}
+  def helper(cprices, rn):
+    if rn==0 or len(cprices)==0:
+      return 0
+
+    if (tuple(cprices), rn) in memo:
+      return memo[(tuple(cprices), rn)]
+
+    maxp = 0
+    for i in range(1, len(cprices)):
+      for j in range(i):
+        cp = cprices[i] - cprices[j] + helper(cprices[:i], rn-1)
+        maxp = max(maxp, cp)
+
+    memo[(tuple(cprices), rn)] = maxp
+    return maxp
+
+  return helper(prices, n)
+
+for dt in {2 : [7, 1, 5, 3, 6, 4], 1 : [7, 6, 4, 3, 1], 3 :[3, 3, 5, 0, 0, 3, 1, 4]}.items():
+  print(buy_and_sell_multiple_n_times(dt[1], dt[0]))
+
+def max_profit_recursive(prices, n):
+    memo = {}  # Memoization dictionary
+
+    def recurse(prices, n):
+        if n == 0 or len(prices) == 0:
+            return 0
+
+        if (tuple(prices), n) in memo:
+            return memo[(tuple(prices), n)]
+
+        max_profit = 0
+        for i in range(1, len(prices)):
+            for j in range(i):
+                profit = prices[i] - prices[j] + recurse(prices[:j], n - 1)
+                max_profit = max(max_profit, profit)
+
+        memo[(tuple(prices), n)] = max_profit
+        return max_profit
+
+    return recurse(prices, n)
+
+for dt in {2 : [7, 1, 5, 3, 6, 4], 1 : [7, 6, 4, 3, 1], 3 :[3, 3, 5, 0, 0, 3, 1, 4]}.items():
+  print(max_profit_recursive(dt[1], dt[0]))
+```
+
+##### Delete duplicate form the array
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def delete_duplicate(arr):
+  if not arr: return arr
+  lval, cindex = arr[0], 0
+  for i in range(1, len(arr)):
+    if arr[i] != lval:
+      arr[cindex] = lval
+      lval = arr[i]
+      cindex += 1
+  arr[cindex] = lval
+  return arr[:cindex+1]
+
+
+def delete_duplicate_v2(arr):
+  if not arr: return arr
+  windex = 1
+  for i in range(1, len(arr)):
+    if arr[windex - 1] != arr[i]:
+      arr[windex] = arr[i]
+      windex += 1
+  return arr, arr[:windex]
+
+delete_duplicate_v2([2,2,3,4,5,6,6,6,7,7,8,9,10,10])
+```
+
+### Recursion and DP
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+### Fibonacci
+
+## using bottom up approach
+
+def fibonnaci_memo(n):
+  memo = [None for _ in range(n+1)]
+  memo[0], memo[1] = 0, 1
+  for i in range(2, n+1):
+    memo[i] = memo[i-1] + memo[i-2]
+  return memo[n]
+
+fibonnaci_memo(100)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def fibonnacci_opt(n):
+  a, b = 0, 1
+  for i in range(2, n):
+    a, b = b, a+b
+  return a+b
+fibonnacci_opt(100)
+```
+
+Child hoping on stairs, possible hops 1, 2 and 3
+Count possible ways to hop until N
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def possible_hops(n):
+  def helper(c):
+    if c < 0: return 0
+    if c == 0: return 1
+
+    h1 = helper(c-1)  ### choose 1
+    h2 = helper(c-2) ### choose 2
+    h3 = helper(c-3) ### choose 3
+    return h1 + h2 + h3
+  return helper(n)
+
+possible_hops(3)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def possible_hops_tabular(n):
+  tab = [0] * (n+1)
+  tab[0] = 1
+  for i in range(1, n+1):
+    for h in range(4):
+      if i >= h:
+        tab[i] += tab[i-h]
+  return tab[n]
+
+possible_hops_tabular(3) == possible_hops(3)
+```
+
+### Linked List
+
+##### Merge sorted list
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class ListNode():
+
+  def __init__(self, val=0, next=None):
+    self.val = val
+    self.next = next
+
+
+def PrintList(l):
+  while l:
+    print(l.val, end=", ")
+    l = l.next
+  print()
+
+
+def merged_sorted_list(l1, l2):
+  head = tail = ListNode()
+  while l1 and l2:
+    if l1.val < l2.val:
+      tail.next, l1 = l1, l1.next
+    else:
+      tail.next, l2  = l2, l2.next
+
+    tail = tail.next
+
+  tail.next = l1 or l2
+  return head.next
+
+
+def merged_sorted_list_recursive(la, lb):
+  def helper(x, y):
+    if not x: return x
+    if not y: return y
+
+    if x.val <= y.val:
+      x.next = helper(x.next, y)
+      return x
+
+    y.next = helper(x, y.next)
+    return y
+  return helper(la, lb)
+
+
+l1 = ListNode(1)
+l1b = ListNode(3)
+l1c = ListNode(5)
+l1d = ListNode(7)
+
+l1.next = l1b
+l1b.next = l1c
+l1c.next = l1d
+
+
+l2 = ListNode(2)
+l2a = ListNode(4)
+l2b = ListNode(6)
+l2c = ListNode(8)
+
+l2.next = l2a
+l2a.next = l2b
+l2b.next = l2c
+
+
+PrintList(l1)
+PrintList(l2)
+
+# PrintList(merged_sorted_list(l1, l2))
+PrintList(merged_sorted_list_recursive(l1, l2))
+
+```
+
+### BSTs
+
+
+#Leetcode 75
+
+## Array
+
+### Leet code 33. [Search in Rotated Sorted Array](https://leetcode.com/problems/search-in-rotated-sorted-array/)
+
+
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def BinarySearch(a, x):
+  if len(a) == 0: return None
+  l, h = 0, len(a)-1
+
+  while l <= h:
+    mid = (l+h) // 2
+    if a[mid]==x: return mid
+
+    ## array to the left of the mid is sorted
+    if a[l] <= a[mid]:
+      if a[l] <= x <= a[mid]:
+        h = (mid-1)
+      else:
+        l = (mid+1)
+    else:
+      if a[mid] <= x <= a[h]:
+        l = mid+1
+      else:
+        h = mid-1
+  return None
+
+
+BinarySearch([3,4,4,5,6,1,2,3], 6)
+```
+
+### 11. [Container With Most Water](https://leetcode.com/problems/container-with-most-water/)
+
+
+```{python}
+def maxArea(self, height) -> int:
+        l, r = 0, len(height)-1
+        maxarea = float("-inf")
+        while l < r:
+            cmax = min(height[l], height[r]) * (r-l)
+            maxarea = max(cmax, maxarea)
+
+            if height[r] < height[l]:
+                r = r-1
+            else:
+                l = l+1
+        return maxarea
+```
+
+### [153. Find Minimum in Rotated Sorted Array](https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/)
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindMinInRotatedList(a):
+  l, r = 0, len(a)-1
+  while l < r:
+    m = (l + r)//2
+    if a[m] > a[r]:
+      l = m + 1
+    else:
+      r = m
+  return a[l]
+
+FindMinInRotatedList([3,1,2])
+```
+
+### [152. Maximum Product Subarray](https://leetcode.com/problems/maximum-product-subarray/)
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindMaxSubArrayProduct(a):
+  mx = float("-inf")
+  cm = 1
+  for i in a:
+    ocm = cm
+    cm = max(cm, cm*i)
+    if ocm > cm:
+      cm = i
+    mx = max(mx, cm)
+  return mx
+
+FindMaxSubArrayProduct([2,3,-12,4, 8])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def decimal_to_binary(n):
+  if n < 2: return n
+  return 10 * decimal_to_binary(n//2) + n%2
+
+decimal_to_binary(3)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def tower_of_hanoi(n, from_rod, to_rod, aux_rod):
+  if n==0: return
+  tower_of_hanoi(n-1, from_rod, aux_rod, to_rod)
+  print("moved disk {0} from {1} to rod {2}".format(n, from_rod, to_rod))
+  tower_of_hanoi(n-1, aux_rod, to_rod, from_rod)
+
+tower_of_hanoi(4, 'A', 'B', 'C')
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def insertion_sort(nums):
+  N = len(nums)
+  for i in range(N):
+    j = i
+    ## move the current number to its correct position in the left side
+    while j > 0 and nums[j-1] > nums[j]:
+      nums[j-1], nums[j] = nums[j], nums[j-1]
+      j -= 1
+  return nums
+
+nums = [2,5,3,4,5,-5,3,45,34]
+insertion_sort(nums)
+
+
+# Space: O(1)
+# Time: O(n^2)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def binsearch_weakest(nums, t):
+  l, r = 0, len(nums)-1
+  idx = r
+  while l<=r:
+    m = l + (r-l)//2
+    if t <= nums[m]:
+      r = m - 1
+      idx = m
+    else:
+      l = m + 1
+  return idx
+
+nums = [1,2,2,2,2,3,3,4,5,6,7]
+binsearch_weakest(nums, 3)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import heapq
+from builtins import iter
+
+
+def merge_sorted_arrays(arrs):
+  min_heap = []
+  sorted_arrays_iter = [ iter(i) for i in arrs ]
+
+  ## build the heap
+  for i, t in enumerate(sorted_arrays_iter):
+    fe = next(t, None)
+    if fe: heapq.heappush(min_heap, (fe, i))
+
+  res = []
+  while min_heap:
+    s_elem, s_arr_i = heapq.heappop(min_heap)
+    res.append(s_elem)
+    next_elem = next(sorted_arrays_iter[s_arr_i], None)
+    if next_elem:
+      heapq.heappush(min_heap, (next_elem,s_arr_i))
+  return res
+
+arrs = [[-100, -99, -1], [1,2,3,4], [100, 101, 102]]
+ans = merge_sorted_arrays(arrs)
+print(ans)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def bin_search_last(arrs, t):
+  l, r = 0, len(arrs)-1
+  res = -1
+
+  while l <= r:
+    m = l + (r-l)//2
+    if arrs[m] < t:
+      l = m + 1
+    elif arrs[m] > t:
+      r = m - 1
+    else:
+      res = m
+      l = m + 1
+  return res
+
+def bin_search_first(arrs, t):
+  l, r = 0, len(arrs)-1
+  res = -1
+
+  while l <= r:
+    m = l + (r-l)//2
+    if arrs[m] < t:
+      l = m + 1
+    elif arrs[m] > t:
+      r = m - 1
+    else:
+      res = m
+      r = m - 1
+  return res
+
+[1,2,3,4,5,5,5,5,6]
+
+f = bin_search_last([2,2,3,3,4,4,4,4], 4)
+l = bin_search_first([2,2,3,3,4,4,4,4], 4)
+print(f, l)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def wordPtr(warr = ["data", "data2"]):
+  print(warr[0][1])
+
+wordPtr()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+nums = [1,2,3,4,5,6]
+nums[:2]
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def find_next_target(nums, t):
+  l, r = 0, len(nums)-1
+  while l <= r:
+    m = l + (r-l)//2
+    if nums[m] <= t:
+      l = m + 1
+    else:
+      r = m - 1
+  return nums[l%len(nums)]
+
+nums = [1,2,3,4,5,6,7,8]
+find_next_target(nums, 2)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def search_target_range(nums, k):
+  l, r = 0, len(nums)-1
+  tl, tr = -1, -1
+
+  while l <= r:
+    m = l + (r-l)//2
+    if nums[m] == k:
+      l = m + 1
+      tr = m
+    elif nums[m] < k :
+      l = m + 1
+    else:
+      r = m - 1
+
+  l, r = 0, len(nums)-1
+  while l <= r:
+    m = l + (r-l)//2
+    if nums[m] == k:
+      r = m - 1
+      tl = m
+    elif nums[m] < k:
+      l = m + 1
+    else:
+      r = m-1
+
+
+  return [tl, tr]
+
+
+nums = [1,2,3,4,5,6,6,6,7,8]
+search_target_range(nums, 6)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+z = zip("hel", "hello")
+for i in z:
+  print(i)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+for place,term in enumerate(('Thousand', 'Million', 'Billion'), 1):
+  print(place, term)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+nums = [23,2,4,6,7]
+p_s = -1
+k = 6
+for i in range(len(nums)):
+  p_s += nums[i]
+  if k != 0:
+    p_s = p_s%k
+  print(p_s)
+
+s = "".join(["1", "2", "3"])
+memoryview(b's')
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+data = "tadataisdata"
+idx = data.find("da")
+data = data[2+len("da"):]
+print(data)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+data = "abcd"
+for i in range(len(data)):
+  print(data[:i] + "*" + data[i+1:])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 35}
+import time
+import random
+def generate_uid():
+  tstamp = int(time.time())
+  random_five_bytes = random.getrandbits(40).to_bytes(5, 'big')
+  counter_three_byte = random.randint(0, 0xFFFFFF).to_bytes(3, 'big')
+  uid_bytes = tstamp.to_bytes(4, 'big') + random_five_bytes + counter_three_byte
+  uid_hex = uid_bytes.hex()
+  return uid_hex
+
+generate_uid()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+data = set()
+data.add(1)
+data.add(2)
+data.add(3)
+data.add(4)
+print(data)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def subarraySumPartition(nums, k):
+
+  dp = {}
+
+  def helper(i, m):
+    if m == 1:
+      return sum(nums[i:])
+
+    if (i, m) in dp: return dp[(i, m)]
+
+    res, csum = float("inf"), 0
+    for i in range(i, len(nums)-m+1):
+      csum += nums[i]
+      maxsum = max(csum, helper(i+1, m-1))
+      res = min(res, maxsum)
+      if csum > res:
+        continue
+    dp[(i, m)] = res
+    return res
+
+  return helper(0, k)
+
+nums = [7,2,5,10,8]
+k = 2
+subarraySumPartition(nums, k)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def findClosesInSorted(nums, t):
+  l, r = 0, len(nums)-1
+  while l <= r:
+    m = l + (r-l)//2
+    if nums[m] == t: return m
+    elif nums[m] < t:
+      l = m+1
+    else:
+      r = m-1
+
+  if l >= len(nums):
+    return r
+  ld, rd = abs(t-nums[l]), abs(t-nums[r])
+  return l if ld < rd else r
+
+nums = [1,10, 20, 30, 40, 50]
+t = 30
+
+idx = findClosesInSorted(nums, t)
+print(idx, nums[idx])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from bisect import *
+nums = [1,10, 20, 30, 30, 30, 30, 40, 50]
+b = bisect_right(nums, 30)
+a = bisect_left(nums, 30)
+print(b, a)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def canShip(cap, weights):
+  cw = 0
+  ships = 0
+  for w in weights:
+    if cw - w < 0:
+      ships += 1
+      cw = cap
+    cw -= w
+
+  return ships
+
+weights = [1, 2, 3, 4, 5]
+canShip(9, weights)
+```
+
+```{python}
+["qo","fo","fq","qf","fo","ff","qq","qf","of","of","oo","of","of","qf","qf","of"]
+'''
+
+'''
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 107}
+def missingKthPositive(arr, k):
+  l, r = 0, len(arr)-1
+  while l <= r:
+    p = l + (r-l)//2
+    print(p)
+    if arr[p] - p - 1 < k:
+      l = p + 1
+    else:
+      r = p - 1
+
+  return l, r
+
+nums = [2,3,4,7,11]
+print(missingKthPositive(nums, 5))
+
+'''
+[2,3,4,7,11]
+1, 5, 6, 8 , 9
+7 - 4 = 3
+
+11 - 5 = 6
+4 + 5 = 9
+3
+
+0 1 2 3 4 5
+
+
+'''
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+prices = [2,3,4,5,6,7,8]
+for i, p in reversed(list(enumerate(prices[1:], 1))):
+  print(i, p)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from random import randint
+res = 0
+for i in range(randint(0, 10)):
+  res = max(res, randint(0, 100))
+  print(res)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+data = {'a' : 0, 'b' : -1, 'c' : 0}
+print()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+nums = [2, 9, 6, 5, 4, 3, 78, 56, 23]
+def rearrange(nums):
+  N = len(nums)
+  for i in range(N):
+    nums[i:i+2] = sorted(nums[i:i+2], reverse=(i%2))
+    print(i%2, bool(i%2))
+
+  print(nums)
+
+rearrange(nums)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def generatePrime(n):
+  primes = []
+  isPrime = [False, False] + [True] * (n-1)
+  for p in range(2, n+1):
+    if isPrime[p]:
+      primes.append(p)
+      for i in range(p*2, n+1, p):
+        isPrime[i] = False
+
+  return primes
+
+generatePrime(100)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def printBreaks(s):
+  for i in range(len(s)+1):
+    print(s[0:i])
+
+printBreaks("leetcode")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+a = 10
+a.bit_length()
+help(a.bit_length)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+d = "The game is on"
+print(d.split())
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 35}
+word = "goat"
+w = word[1:] + word[0]
+w
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class TrieNode():
+
+  def __init__(self):
+    self.children = {}
+    self.isWord = False
+
+class Trie():
+
+  def __init__(self):
+    self.root = TrieNode()
+
+  def insert(self, word):
+    cur = self.root
+    for c in word:
+      if c not in cur.children:
+        cur.children[c] = TrieNode()
+      cur = cur.children[c]
+
+    cur.isWord = True
+    print(cur)
+
+  def startsWith(self, word):
+    cur = self.root
+    for c in word:
+      if c not in cur.children:
+        return False
+      cur = cur.children[c]
+    return True
+
+  def search(self, word):
+    cur = self.root
+    for c in word:
+      if c not in cur.children:
+        return False
+      cur = cur.children[c]
+
+    return cur.isWord
+
+
+
+t = Trie()
+t.insert("apple")
+print(t.search("apple"))
+print(t.startsWith("zz"))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class Node():
+
+  def __init__(self, val=0):
+    self.val = val
+    self.left = None
+    self.right = None
+
+
+n = Node()
+n.parent = Node(12)
+
+print(n.parent.val)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def binExp(x, n):
+  res = 1
+  while n > 0:
+    if n%2 == 1:
+      print(x, n, res, "-->", end="")
+      res *= x
+      n -= 1
+      print(x, n, res)
+    x *= x
+    n = n // 2
+  return res
+
+binExp(2, 10)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def findPalindrome(word):
+  l, r = 0, len(word)-1
+  isLowerLetter = lambda x: ord('a') <= ord(x.lower()) <= ord('z')
+
+  while l <= r:
+    while not (isLowerLetter(word[l])):
+      l += 1
+    while not (isLowerLetter(word[r]) ):
+      r -= 1
+    if word[l] != word[r]:
+      return False
+    l += 1
+    r -= 1
+  return True
+
+
+findPalindrome("racecar")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from functools import lru_cache
+def findMaxProduct(n):
+  @lru_cache
+  def integerBreak(num):
+    if num <= 3: return num
+    res = num
+    for i in range(2, num):
+      res = max(res, i * integerBreak(num-i))
+    return res
+  if n <= 3: return n-1
+  return integerBreak(n)
+
+
+findMaxProduct(16)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+## (located on the number line at position Qx) = (Eqx/abs(Px-Qx))
+
+def minEffectLocation(p, qlist):
+  minEffect, minLoc = float("inf"), -1
+  for px in range(1, p-1):
+    effect = sum([ eqx / abs(px-qx) if (px-qx) != 0 else float("inf") for eqx, qx in qlist ])
+    if effect < minEffect:
+      minEffect = effect
+      minLoc = px
+  return minLoc
+
+minEffectLocation(5, [[10,0],[20,4]])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def getDistintPasswordVariability(password):
+  if password == "": return 0
+  plen = len(password)
+
+  distinctPassword = set()
+
+  for i in range(plen):
+    for j in range(i, plen):
+      subStr = password[i:j+1][::-1]
+      npwd = password[:i] + subStr + password[i+1:]
+      distinctPassword.add(npwd)
+  return len(distinctPassword)
+
+
+getDistintPasswordVariability("abc")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+s = "abcdabc"
+lastOcc = { c:i for i, c in enumerate(s) }
+print(lastOcc)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def findFirstMatchingIndex(nums):
+  if not nums: return -1
+  l, r = 0, len(nums)-1
+
+  res = -1
+  while l <= r:
+    m = l + (r-l)//2
+    if nums[m] - m > 0:
+      r = m - 1
+    elif nums[m] - m < 0:
+      l = m + 1
+    else:
+      res = m
+      r = m - 1
+
+  return res
+
+nums = [-8,0,1,3,5]
+findFirstMatchingIndex(nums)
+
+
+### -2 1 2 3 4 100
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class DisjointSet():
+
+  def __init__(self, N):
+    self.parent = [i for i in range(N)]
+    self.rank = [0 for i in range(N)]
+
+  def Union(self, u, v):
+    u = self.Find(u)
+    v = self.Find(v)
+
+    if u != v:
+      if self.rank[u] < self.rank[v]:
+        u, v = v, u
+      self.parent[v] = u
+      if self.rank[u] == self.rank[v]:
+        self.rank[u] += 1
+
+
+
+  def Find(self, x):
+    if x == self.parent[x]: return x
+    self.parent[x] = self.Find(self.parent[x])
+    return self.parent[x]
+
+
+d = DisjointSet(5)
+d.Union(0, 1)
+d.Union(0, 2)
+d.Union(3, 4)
+print(d.Find(2), d.Find(4))
+print(d.rank)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import heapq
+
+def MergeSortedArray(sortedArr):
+  minHeap = []
+  sortedIter = [ iter(x) for x in sortedArr]
+
+  for i, it in enumerate(sortedIter):
+    felem = next(it)
+    if next is not None:
+      heapq.heappush(minHeap, (felem, i))
+
+  res = []
+  while minHeap:
+    nelem, idx = heapq.heappop(minHeap)
+    res.append(nelem)
+    nextItem = next(sortedIter[idx], None)
+    if nextItem: heapq.heappush(minHeap, (nextItem, idx))
+
+  return res
+
+MergeSortedArray([[1,3,5,7,9], [2,4,6,8,10]])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindSelfDrivingWays(n):
+
+  def isValid(r, c):
+    if not (0 <= r < ROWS): return False
+    if not (0 <= c < COLS): return False
+    if r < c: return False
+    return True
+
+  memo = {}
+  def dfs(r, c, sol=[]):
+    if not isValid(r,c): return 0
+    if r == ROWS-1 and c == COLS-1:
+      sol.append((r, c))
+      print(sol.copy())
+      return 1
+
+    if (r, c) in memo:
+      sol.append((r, c))
+      print(sol.copy())
+      return memo[(r, c)]
+
+    sol.append((r, c))
+    tcounts = 0
+    ## move north
+    nr, nc = r+1, c
+    if isValid(nr, nc):
+      tcounts += dfs(nr, nc, sol.copy())
+
+    ## move east
+    er, ec = r, c+1
+    if isValid(er, ec):
+      tcounts += dfs(er, ec, sol.copy())
+
+    memo[(r, c)] = tcounts
+    return tcounts
+
+  ROWS = COLS = n
+  return dfs(0, 0)
+
+
+FindSelfDrivingWays(5)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def numOfPathsToDest(n):
+    dp = [[0] * n for _ in range(n)]
+
+    for i in range(n):
+        dp[i][0] = 1  # Initialize leftmost column to 1
+
+    for i in range(1, n):
+        for j in range(1, n):
+            if i >= j:
+                dp[i][j] = dp[i-1][j] + dp[i][j-1]
+
+    return dp[n-1][n-1]
+
+print(numOfPathsToDest(5))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def reverseInt(n):
+    ans = 0
+    while n:
+        cn = n % 10
+        ans = ans*10 + cn
+        n = n // 10
+    return ans
+
+print(reverseInt(38976))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def TestLocalVar():
+  def inc():
+    nonlocal count
+    count += 1
+
+  count = 0
+  inc()
+  inc()
+  inc()
+  return count
+
+TestLocalVar()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+data = "a, a, a, a, b,b,b,c, c"
+data.split()
+
+def isChar(c):
+  if ord('a') <= ord(c.lower()) <= ord('z'): return True
+  return False
+
+def replacePuntuation(word):
+  newWord = []
+  for w in word:
+    if isChar(w): newWord.append(w)
+  return "".join(newWord).lower()
+
+wlist = [replacePuntuation(w) for w in data.split()]
+
+print(wlist)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+
+import collections
+import bisect
+
+class FileSystem:
+
+    def __init__(self):
+        self.paths = collections.defaultdict(list)
+        self.files = collections.defaultdict(str)
+
+
+    def ls(self, path: str):
+        if path in self.files:
+            return [ path.split("/")[-1] ]
+
+        return self.paths[path]
+
+
+    def mkdir(self, path: str) -> None:
+        dirs = path.split("/")
+        for d in range(1, len(dirs)):
+            curDir = "/".join(dirs[:d]) or "/"
+            if curDir not in self.paths or dirs[d] not in self.paths[curDir]:
+                bisect.insort(self.paths[curDir], dirs[d])
+
+
+
+    def addContentToFile(self, filePath: str, content: str) -> None:
+        if filePath not in self.files:
+            self.mkdir(filePath)
+        self.files[filePath] += content
+
+    def readContentFromFile(self, filePath: str) -> str:
+        return self.files[filePath]
+
+    def printData(self):
+      print(self.paths)
+      print(self.files)
+
+
+
+
+
+fileSystem = FileSystem();
+fileSystem.ls("/");
+fileSystem.mkdir("/a/b/c");
+fileSystem.mkdir("/a/a/b/c");
+fileSystem.mkdir("/a/m");
+
+
+fileSystem.addContentToFile("/a/b/c/d", "hello")
+print(fileSystem.ls("/a"))
+print(fileSystem.readContentFromFile("/a/b/c/d"))
+fileSystem.printData()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def count_k_big_indices(nums, k):
+    n = len(nums)
+    left = [0] * n
+    right = [0] * n
+    stack = []
+
+    for i in range(n):
+        while stack and nums[stack[-1]] < nums[i]:
+            stack.pop()
+        if stack:
+            left[i] = stack[-1] + 1
+        stack.append(i)
+
+    stack = []
+    for i in range(n - 1, -1, -1):
+        while stack and nums[stack[-1]] < nums[i]:
+            stack.pop()
+        if stack:
+            right[i] = stack[-1] - 1
+        stack.append(i)
+
+    count = 0
+    for i in range(n):
+        if right[i] >= k and left[i] >= k:
+            count += 1
+
+    print(left, right)
+    return count
+
+# Example usage
+nums = [2, 3, 6, 5, 2, 3]
+k = 2
+print(count_k_big_indices(nums, k))  # Output: 2
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def max_subsequence_sum(nums, k):
+    max_sum = float('-inf')
+    max_start = 0
+
+    # Calculate the sum of the first subsequence of length k
+    current_sum = sum(nums[:k])
+    max_sum = current_sum
+
+    # Iterate through the remaining subsequences of length k
+    for i in range(1, len(nums) - k + 1):
+        # Update the current sum by adding the next element and subtracting the first element
+        current_sum = current_sum - nums[i - 1] + nums[i + k - 1]
+        # Update the maximum sum and the starting index of the subsequence
+        if current_sum > max_sum:
+            max_sum = current_sum
+            max_start = i
+
+    # Return the subsequence with the maximum sum
+    return nums[max_start:max_start + k]
+
+# Test the function
+nums1 = [2, 1, 3, 3]
+k1 = 2
+print(max_subsequence_sum(nums1, k1))  # Output should be [3, 3]
+
+nums2 = [-1, -2, 3, 4]
+k2 = 3
+print(max_subsequence_sum(nums2, k2))  # Output should be [-1, 3, 4]
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def Bisect(n, arr):
+  l, r = 0, len(arr)-1
+
+  res = -1
+  while l <= r:
+    m = l + (r-l)//2
+    if arr[m] >= n:
+      r = m - 1
+    else:
+      l = m + 1
+
+  return l, r
+
+Bisect(45, [10,30,40,50,60])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+f = set([1,2,3])
+g = set([2,3])
+f-g
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def longestIncreasingPath(matrix):
+    if not matrix or not matrix[0]:
+        return 0
+
+    ROWS, COLS = len(matrix), len(matrix[0])
+    neis = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    memo = {}
+
+    def validMove(r, c, pval):
+        return 0 <= r < ROWS and 0 <= c < COLS and matrix[r][c] > pval
+
+    def dfs(r, c):
+        stack = [(r, c)]
+        path = 0
+
+        while stack:
+            cr, cc = stack[-1]
+            if (cr, cc) in memo:
+                path = max(path, memo[(cr, cc)])
+                stack.pop()
+                continue
+
+            memo[(cr, cc)] = 1
+            for x, y in neis:
+                nr, nc = cr + x, cc + y
+                if validMove(nr, nc, matrix[cr][cc]):
+                    stack.append((nr, nc))
+                    memo[(cr, cc)] = max(memo[(cr, cc)], path + 1)
+
+        return path
+
+    longestLen = 0
+    for r in range(ROWS):
+        for c in range(COLS):
+            longestLen = max(longestLen, dfs(r, c))
+
+    return longestLen
+
+# Example usage
+matrix = [[9,9,4],[6,6,8],[2,1,1]]
+print(longestIncreasingPath(matrix))  # Output: 4
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import heapq
+import collections
+
+class Solution:
+    def cutOffTree(self, forest):
+
+        def isValid(r, c):
+            return 0 <= r < ROWS and 0 <= c < COLS and forest[r][c]>0
+
+        def bfs(sr, sc, tr, tc):
+            queue = collections.deque([(sr, sc, 0)])
+            visited = {(sr, sc)}
+            while queue:
+                cr,cc, steps = queue.popleft()
+                if cr==tr and cc==tc:
+                    forest[cr][cc] == 1. ## cut the tree
+                    return steps
+
+                for dr, dc in neis:
+                    nr, nc = cr+dr, cc+dc
+                    if (nr, nc) not in visited and isValid(nr, nc):
+                        visited.add((nr, nc))
+                        queue.append((nr, nc, steps+1))
+
+            return -1
+
+        neis = { (1, 0), (0, 1), (-1, 0), (0, -1) }
+        tsteps = 0
+        ROWS, COLS = len(forest), len(forest[0])
+        forestHeap = []
+        for r in range(ROWS):
+            for c in range(COLS):
+              if forest[r][c] > 1:
+                heapq.heappush(forestHeap, (forest[r][c], r, c))
+
+        sr, sc = 0, 0
+        while forestHeap:
+            h, r, c = heapq.heappop(forestHeap)
+            spath = bfs(sr, sc, r, c)
+            if spath==-1: return spath
+            tsteps += spath
+            sr, sc = r, c
+
+        return tsteps
+
+
+s = Solution()
+s.cutOffTree([[1,2,3],[0,0,4],[7,6,5]])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def BinaryDecimal(bstr):
+  d = 0
+  for i in bstr:
+    d = d*2 + int(i)
+  return d
+
+BinaryDecimal(["1", "0", "0"])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+d = [3, 8, 48]
+for i in range(len(d)):
+  for j in range(i+1, len(d)):
+    print(d[i], d[j], "and > ", d[i] & d[j])
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 35}
+def FindMissingRange(nums):
+  l, u = nums[0], nums[-1]
+
+  res = ""
+  ## find any below given lower bound
+  mlarr = []
+  for i in range(0, l+1):
+    mlarr.append(str(i))
+
+  if len(mlarr) > 2:
+    res + (str(mlarr[0])) + ".." + str(mlarr[-1])
+  else:
+    res += ", ".join(mlarr) if mlarr else ""
+
+  start = 0
+  for i in range(1, len(nums)):
+    tres = []
+    if nums[i] - nums[start] > 1:
+      for j in range(start+1, i):
+        tres.append(str(j))
+      if len(tres) > 2: res += str(tres[0]) + "..." + str(tres[-1])
+      else: res += ", ".join(tres)
+
+    start = i
+
+
+  muarr = []
+  for i in range(u, 100):
+    muarr.append(str(i))
+
+  if len(muarr) > 2:
+    res + (str(muarr[0])) + ".." + str(muarr[-1])
+  else:
+    res += ", ".join(muarr) if muarr else ""
+
+  return res
+
+
+FindMissingRange([2, 3, 4, 98])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from random import *
+
+def FindKthSmallest(nums, k):
+  return quickSelect(nums, 0, len(nums)-1, k-1)
+
+
+def partitions(nums, l, r):
+  pIdx = randint(l, r)
+  pval = nums[pIdx]
+  nums[r], nums[pIdx] = nums[pIdx], nums[r]
+  i = l
+  for j in range(l, r):
+    if nums[j] < pval:
+      nums[i], nums[j] = nums[j], nums[i]
+      i += 1
+  nums[r], nums[i] = nums[i], nums[r]
+  return i
+
+
+def quickSelect(nums, l, r, k):
+  if l==r:
+    return nums[l]
+
+  pIdx = partitions(nums, l, r)
+  if pIdx == k: return nums[pIdx]
+  elif pIdx < k:
+    return quickSelect(nums, pIdx, r, k)
+  else:
+    return quickSelect(nums, l, pIdx, k)
+
+  return -1
+
+
+
+nums = [1,2,3,4,5,90,89,100]
+k = 6
+FindKthSmallest(nums, k)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def RandomizeArray(nums):
+  for i in range(len(nums)-1, -1, -1):
+    j = randint(0, i)
+    nums[i], nums[j] = nums[j], nums[i]
+  return nums
+
+RandomizeArray([1, 2, 3, 4, 5])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindUniqueIslands(matrix):
+
+  def isValid(r, c):
+    if not (0 <= r < ROWS) or  not (0 <= c < COLS) :
+      return False
+    return matrix[r][c] == 1
+
+
+  def _getHash(hashList):
+    h = [str(dr)+str(dc) for dr, dc in hashList]
+    return '_'.join(h)
+
+  def dfs(r, c):
+    stack = [ ((r, c), [0, 0])]
+    hash = []
+    while stack:
+      cinfo, dinfo = stack.pop()
+      cr, cc = cinfo
+      dinfoR, dinfoC = dinfo
+
+      visited.add((cr, cc))
+      hash.append([dinfoR, dinfoC])
+
+      for dr, dc in dirs:
+        nr, nc = cr+dr, cc+dc
+        if (nr, nc) not in visited and isValid(nr, nc):
+          ndinfo = [dr+dinfoR, dc+dinfoC]
+          stack.append(((nr, nc),  ndinfo))
+
+    return _getHash(hash)
+
+
+  dirs = { (1, 0), (-1, 0), (0, 1), (0, -1) }
+  visited = set()
+  uniqueIslands = set()
+  ROWS, COLS = len(matrix), len(matrix[0])
+
+  for r in range(ROWS):
+    for c in range(COLS):
+      if (r, c) not in visited and matrix[r][c] == 1:
+        iHash = dfs(r, c)
+        uniqueIslands.add(iHash)
+
+  return uniqueIslands
+
+
+grid = [
+    [1, 1, 0, 0],
+    [1, 0, 0, 0],
+    [0, 0, 0, 1],
+    [0, 0, 0, 1],
+    [1, 0, 0, 0],
+    [1, 0, 0, 0]
+]
+u = FindUniqueIslands(grid)
+print(u, len(u))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from random import *
+
+def KthSmallestElement(nums, k):
+
+  def partition(nums, l, r):
+    pidx = randint(l, r)
+    pval = nums[pidx]
+    nums[r], nums[pidx] = nums[pidx], nums[r]
+    i = l
+    for j in range(l, r):
+      if nums[j] < pval:
+        nums[i], nums[j] = nums[j], nums[i]
+        i += 1
+
+    nums[i], nums[r] = nums[r], nums[i]
+    return pidx
+
+  def quickSelect(nums, l, r):
+    if l == r:
+      return nums[l]
+
+    idx = partition(nums, l, r)
+    if idx == k: return nums[idx]
+    elif idx < k:
+      return quickSelect(nums, idx+1, r)
+    else:
+      return quickSelect(nums, l, idx-1)
+
+    return -1
+
+  return quickSelect(nums, 0, len(nums)-1)
+
+
+nums = [1, 2, 3, 4, 5, 100, 101]
+
+k = 3
+KthSmallestElement(nums, k-1)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+'''
+Input: files = [ "/webapp/assets/html/a.html", "/webapp/assets/html/b.html", "/webapp/assets/js/c.js", "/webapp/index.html" ]
+
+dirs = {
+  "webapp: [assets, js],
+  "assets": [html],
+  "js: []
+}
+
+files = {
+}
+
+
+'''
+
+
+class TrieNode:
+
+  def __init__(self, n):
+    self.children = {}
+    self.name = n
+
+class Trie:
+
+  def __init__(self):
+    self.root = TrieNode("root")
+
+  def insert(self, filePath):
+    files = filePath.split("/")[1:]
+    cnode = self.root
+    for file in files:
+      if file not in cnode.children:
+        cnode.children[file] = TrieNode(file)
+      cnode = cnode.children[file]
+
+  def printDfs(self, node, indent):
+    if not node.children:
+      print(indent, "--", node.name)
+      return
+
+    print(indent, "|", node.name)
+    for d in node.children.values():
+      self.printDfs(d, indent*2)
+
+  def printAllLs(self):
+    self.printDfs(self.root, " ")
+
+
+files = [ "/webapp/assets/html/a.html", "/webapp/assets/html/b.html", "/webapp/assets/js/c.js", "/webapp/index.html" ]
+t = Trie()
+for f in files:
+  t.insert(f)
+
+t.printAllLs()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def SearchMaxLen(nums):
+
+  def helper(cnum, clen):
+    '''
+      Returns the count of the sequence starting from cnum
+      cnum: stating count
+      clen: size of the current counts
+    '''
+    if cnum+1 not in cache: return clen
+    memo[cnum] = helper(cnum+1, clen+1)
+    return memo[cnum]
+
+  cache = set(nums)
+  mlen = 1
+  memo = {}
+  for n in nums:
+    if n-1 not in cache:
+      mlen = max(mlen, helper(n, 1))
+
+  return mlen
+
+
+nums = [1, 2, 3, 4, 5, 100, 101, 102, 103, 104, 105, 106, 107, 89]
+SearchMaxLen(nums)
+```
+
+$\sqrt{\alpha_1 + \frac{\beta}{\gamma}}$
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def JustifyWithHiphen(s, maxLen):
+  n = len(s)
+  res = []
+  i = 0
+  while i < n-1:
+    opt1 = s[i] + "-" + s[i+1]
+    opt2 = s[i] + "-"
+    opt3 = s[i]
+    if len(opt1) <= maxLen:
+      res.append(opt1)
+      i += 2
+    elif len(opt2) <= maxLen:
+      res.append(opt2)
+      i += 1
+    else:
+      res.append(opt3)
+      i += 1
+
+  if i != n:
+    res.append(s[i])
+
+  return res
+
+s = ["1p3acres", "is", "a", "good", "place", "to", "communicate"]
+a = 12
+JustifyWithHiphen(s, a)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import Counter
+
+def FindMaxDuplicate(nums, x, y , z):
+
+
+  def helper(idx, clist):
+    if idx == n:
+      maxdup = max(Counter(clist).values())
+      return maxdup
+
+    xop = nums[idx] + x
+    yop = nums[idx] - y
+    zop = nums[idx] * z
+    nop = nums[idx]
+    return max(
+        helper(idx+1, clist.copy() + [xop]),
+        helper(idx+1, clist.copy() + [yop]),
+        helper(idx+1, clist.copy() + [zop]),
+        helper(idx+1, clist.copy() + [nop]),
+        )
+
+  n = len(nums)
+  return helper(0, [])
+
+FindMaxDuplicate([1, 2, 6, 6, 5, 6], 1, 1, 1)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 35}
+def AddBinary(b1, b2):
+  m, n = list(b1), list(b2)
+  r, c = "", 0
+  while m and n:
+    a, b = int(m.pop()), int(n.pop())
+    r = str((a+b+c) % 2) + r
+    c += (a+b) // 2
+
+
+
+  while c > 0:
+    r = str(c%2) + r
+    c = c // 2
+  return r
+
+AddBinary("11", "11")
+```
+
+```{python}
+def findLength(nums1, nums2) -> int:
+        def helper(i, j, cmax):
+            if i==m or j==n:
+                return cmax
+            print(i, j, nums1[i], nums2[j])
+            if (i, j) in memo: return memo[(i, j)]
+            if nums1[i] == nums2[j]:
+                memo[(i, j)] = helper(i+1, j+1, cmax+1)
+                return memo[(i, j)]
+
+            memo[(i, j)] = max( helper(i+1, j, 0), helper(i, j+1, 0), cmax )
+            return memo[(i, j)]
+
+        memo = {}
+        m, n = len(nums1), len(nums2)
+        return helper(0, 0, 0)
+
+nums1 = [-9, 1, 12, 12, 12]
+nums2 = [0, 1, 13, 13, 13]
+# findLength(nums1, nums2)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+
+class Node():
+
+  def __init__(self,  k=None, v=None) -> None:
+    self.key, self.value = k, v
+    self.prev = None
+    self.next = None
+
+
+class LRUCache():
+
+  def __init__(self, cap):
+    self.capacity = cap
+    self.left, self.right = Node(), Node()
+    self.left.next, self.right.prev = self.right, self.left
+    self.cache = {} ## (key, nodeRef)
+
+
+  def _remove(self, node):
+    nPrev, nNext = node.prev, node.next
+    nPrev.next = nNext
+    nNext.prev = nPrev
+
+  def _insert(self, node):
+    rPrev, nxt = self.right.prev, self.right
+    rPrev.next = nxt.prev = node
+    node.prev, node.next = rPrev, nxt
+
+
+  def Get(self, key):
+    if key in self.cache:
+      node = self.cache[key]
+      self._remove(node)
+      self._insert(node)
+      return node.value
+
+    return -1
+
+
+  def Put(self, key, value):
+    if key in self.cache:
+      self._remove(self.cache[key])
+
+    self.cache[key] = Node(key, value)
+    self._insert(self.cache[key])
+
+    ## handle eviction
+    if self.capacity < len(self.cache):
+      lru = self.left.next
+      self._remove(lru)
+      del self.cache[lru.key]
+
+lRUCache = LRUCache(2)
+lRUCache.Put(1, 1)
+lRUCache.Put(2, 2)
+print(lRUCache.Get(1))
+lRUCache.Put(3, 3)
+print(lRUCache.Get(2) )
+lRUCache.Put(4, 4)
+print(lRUCache.Get(1))
+print(lRUCache.Get(3))
+print(lRUCache.Get(4))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+'''
+
+[2,3,1,1,4]
+
+0 : idx
+
+'''
+
+def FindMinJumps(nums):
+
+  def helper(idx):
+    if idx == n-1:
+      return 0
+
+    nxt = float("inf")
+    for j in range(1, nums[idx]+1):
+      if idx + j < n:
+        jumps = helper(idx+j)
+        nxt = min(nxt, jumps+1)
+
+    return nxt
+  n = len(nums)
+  return helper(0)
+
+FindMinJumps([2,3,1,1,4])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import deque
+
+data = [1, 2, 3, 4, 5]
+queue = deque(data)
+while queue:
+  print(queue.popleft())
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import *
+
+def FindMaxGiftsPossible(gifts):
+  gift = namedtuple('Gift', ['Day', 'Cost'])
+  glist = [ gift(d, c) for d, c in gifts ]
+  sortedGifts = sorted(glist, key=lambda x: x.Cost)
+  return sortedGifts
+
+items = [(1, 100), (2, 101), (3, 0), (5, 1)]
+FindMaxGiftsPossible(items)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def LongestSubarraySum(nums):
+  if not nums: return None
+  cmax = gmax = nums[0]
+  for n in nums[1:]:
+    cmax = max(cmax+n, n)
+    gmax = max(gmax, cmax)
+  return gmax
+
+nums = [1, 100, 20, -9, 12, 89]
+LongestSubarraySum(nums)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def MinimumJumpCount(nums):
+  if not nums: return 0
+  n = len(nums)
+
+  def helper(cidx, clen):
+    if cidx == n: return clen
+
+    njmp = float("inf")
+    for j in nums[cidx+1:]:
+      if j+cidx <= n:
+        njmp = min(njmp, helper(j+cidx, clen+1))
+
+    return njmp
+
+  return helper(0, 0)
+
+jumps = [2, 3, 1, 1, 4]
+MinimumJumpCount(jumps)
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from random import randint
+
+class OptGetRandom:
+
+  def __init__(self):
+    self.cache = {}  ## stores, value, idx of the value in available list
+    self.availableList = []
+
+  def insert(self, v):
+    if v in self.cache: return
+    self.availableList.append(v)
+    self.cache[v] = len(self.availableList)-1
+
+  def remove(self, v):
+    if v not in self.cache: return
+    idx = self.cache[v]
+    n = len(self.availableList)
+    self.availableList[idx], self.availableList[n-1] = self.availableList[n-1], self.availableList[idx]
+
+    ## update the swaped last idx for cache
+    self.cache[self.availableList[idx]] = idx
+
+    ## remove from list and hashMap
+    del self.cache[v]
+    self.availableList.pop()
+
+  def getRandom(self):
+    ridx = randint(0, len(self.availableList)-1)
+    return self.availableList[ridx]
+
+
+org = OptGetRandom()
+org.insert(1)
+org.insert(2)
+org.insert(3)
+org.insert(4)
+
+org.getRandom()
+
+print(org.availableList, org.cache)
+org.remove(3)
+print(org.availableList, org.cache)
+
+print([org.getRandom() for _ in range(5)])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import re
+
+def replace_if_matches(text, substrings, replacement):
+    pattern = '|'.join(map(re.escape, substrings))
+    return re.sub(pattern, replacement, text)
+
+text = "The quick brown fox jumps over the lazy dog"
+substrings = ["quick", "fox", "lazy"]
+replacement = "****"
+
+result = replace_if_matches(text, substrings, replacement)
+print(result)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def GetMinCostString(n, costMatrix):
+  if not n: return 0
+
+
+  def helper(c, idx):
+    ## base cases
+    if idx == n: return 0
+    if (c, idx) in memo: return memo[(c, idx)]
+
+    ## get the min price for current index
+    curCost = costMatrix[idx][c]
+    mcost = float("inf")
+    for j in range(4):
+      if j != c:
+        mcost = min(mcost, helper(j, idx+1))
+
+    ## save in memo
+    memo[(c, idx)] = curCost + mcost
+    return memo[(c, idx)]
+
+  memo = {}
+  gmin = float("inf")
+  for i in range(4):
+    gmin = min(gmin, helper(i, 0))
+
+  return gmin
+
+cmatrix = [
+    [2, 3, 4, 5],
+    [7, 3, 4, 1]
+]
+GetMinCostString(2, cmatrix)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def CountPalindromes(l, r, s):
+  c, ans = 0, 0
+  while l >= 0 and r < len(s):
+    if s[l] != s[r]: break
+    l, r = l-1, r+1
+    ans += 1
+
+  return ans
+
+s = "a"
+for i in range(len(s)):
+  o, e = CountPalindromes(i, i, s), CountPalindromes(i, i+1, s)
+  print(i, o, e)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def MinOpsToSort(nums):
+  ans = 0
+  n = len(nums)
+  while not all([nums[i]==i+1 for i in range(n)]):
+    i = 0
+    while i < n:
+      if nums[i] != i+1:
+        ans += 1
+        nums.append(nums.pop(i))
+        break
+      i += 1
+  return ans
+
+nums = [3, 2, 1]
+MinOpsToSort(nums)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindMinInRotatedArray(nums):
+  l, r = 0, len(nums)-1
+  while l <= r:
+    m = l + (r-l)//2
+    if nums[m] > nums[r]:
+      l = m + 1
+    else:
+      r = m - 1
+  return l, r
+
+nums = [4, 5, 6, 7, 1, 2, 3]
+FindMinInRotatedArray(nums)
+```
+
+```{python}
+
+class TreeNode:
+
+  def __init__(self, v=None):
+    self.val = v
+    self.left = None
+    self.right = None
+
+
+class BinaryTree:
+
+  def __init__(self, nlist):
+    self.root = self._create(nlist)
+
+  def _create(self, nlist):
+    pass
+
+
+def CreateBinaryTree(nlist):
+  pass
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def IsEqual(alist, blist):
+  aint, bint = "", ""
+  for i in alist:
+    aint += str(i)
+  for j in blist:
+    bint += str(j)
+
+  return int(aint) == int(bint)
+
+
+IsEqual([0, 1, 1, 0], [1, 1])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import random
+
+
+random.uniform(0, 100)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import random
+import collections
+
+class GetRandomWeightedValue:
+
+  def __init__(self, nums):
+    self.prefixSums = []
+    self.psum = 0
+    for v in nums:
+      self.psum += v
+      self.prefixSums.append(self.psum)
+
+  def GetRandomIndex(self):
+    t = random.uniform(0, self.psum)
+    for idx, p in enumerate(self.prefixSums):
+      if p > t:
+        return nums[idx]
+
+
+nums = [1, 2, 3, 4, 5]
+wrnd = GetRandomWeightedValue(nums)
+ans = []
+for i in range(100):
+  ans.append(wrnd.GetRandomIndex())
+
+print(collections.Counter(ans))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindTheInterleaving(s1, s2, s3):
+  m, n , l = len(s1), len(s2), len(s3)
+  if m+n != l: return False
+
+  def helper(i, j, r):
+    if i==m and j==n:
+      return r == s3
+
+    if (i, j) in memo and memo[(i, j)]: return memo[(i, j)]
+
+    ans = False
+    if i<m: ans = ans or helper(i+1, j, r+s1[i])
+    if j<n: ans = ans or helper(i, j+1, r+s2[j])
+    memo[(i, j)] = ans
+    return ans
+
+  memo = {}
+  ans = helper(0, 0, "")
+  print(memo)
+  return ans
+
+
+FindTheInterleaving("abcdx", "efghy", "abefcdghxy")
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+{
+    'a' : 1,
+    'b' : 0,
+    'c' : 1,
+}
+
+"abcac"
+
+from collections import Counter
+
+def ReorganizeString(s):
+
+
+  def helper(r, pc):
+    if len(r) == n:
+      ans.add(r)
+      return r, True
+
+    if (r, pc) in memo: return memo[(r, pc)]
+
+    res = ""
+    for c in counts.keys():
+      if c != pc and counts[c] > 0:
+        counts[c] -= 1
+        res, f = helper(r+c, c)
+        if f:
+          memo[(res, c)] = res, True
+          return res, True
+        counts[c] += 1
+
+    return "", False
+
+  ans = set()
+  counts = Counter(s)
+  n = len(s)
+  memo = {}
+  seq, found = helper("", "")
+  print(ans, seq)
+
+'''
+eqpspvbpppwpgyppppe
+'''
+ReorganizeString("eqpspvbpppwpgyppppe")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 35}
+
+from collections import Counter, defaultdict
+
+def FindMinWindowSubsting(sentence, substr):
+  if not sentence: return ''
+  subStrMap = Counter(substr)
+  l = r = 0
+
+  seenMap = defaultdict(int)
+  have, req = 0, len(subStrMap)
+  l = 0
+  res, resLen = [-1, -1], float("inf")
+  for r, w in enumerate(sentence):
+    seenMap[w] += 1
+    if w in subStrMap and seenMap[w] == subStrMap[w]:
+      have += 1
+
+    while have == req:
+      if r-l+1 < resLen:
+        res = [l, r]
+        resLen = min(resLen, r-l+1)
+
+      c = sentence[l]
+      seenMap[c] -= 1
+      if c in subStrMap and seenMap[c] < subStrMap[c]:
+        have -= 1
+      l += 1
+
+  l, r = res[0], res[1]
+  return sentence[l:r+1] if resLen != float("inf") else ""
+
+s = "ADOBECODEBANC"
+t = "ABC"
+FindMinWindowSubsting(s, t)
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def MaximumSubArraySum(nums):
+  n = len(nums)
+  maxsum, csum = float("-inf"), 0
+  for n in nums:
+    csum = max(n, csum+n)
+    maxsum = max(maxsum, csum)
+
+  return maxsum
+
+nums = [-1,2,4,-3,5,2,-5,2]
+MaximumSubArraySum(nums)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+## [0, n-1]
+
+from random import randint
+from collections import Counter
+
+def CountingSort(nums):
+  mx = max(nums)
+  aux = [0 for _ in range(mx+1)]
+  for n in nums:
+    aux[n] += 1
+
+  sortedArray = []
+  for idx, ax in enumerate(aux):
+    if aux[idx] > 0:
+      sortedArray.append(idx)
+
+  return sortedArray, Counter(nums)
+
+nums = [randint(0, 100) for _ in range(1000)]
+print(nums[:20])
+slist, counts = CountingSort(nums)
+print(slist[:20], "\n")
+fe = []
+for k, v in counts.items():
+  if v>10: fe.append(k)
+print(fe)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 1000}
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+
+def getCollatzPoints(n):
+  xlist, ylist = [], []
+  while n != 1:
+    x, y = n, n//2 if n%2==0 else n*3+1
+    xlist.append(x)
+    ylist.append(y)
+    n = y
+  return xlist, ylist
+
+def CollatzConjecture(l, r):
+  for i in range(l, r+1):
+    x, y = getCollatzPoints(i)
+    plot(x, y, [j-i for i, j in zip(x, y)], True)
+
+def plot(xlist, ylist, dlist,  diff=False):
+
+  if diff:
+    plt.title("diff {0}".format(xlist[0]))
+    plt.plot(dlist)
+    plt.show()
+    return
+
+  # Create the plot (using the default scatter plot style)
+  sns.scatterplot(x=xlist, y=ylist)
+
+  # Customize the plot (optional)
+  plt.xlabel("X-axis")
+  plt.ylabel("Y-axis")
+  plt.title("Discrete Data Plot")
+
+  # Show the plot
+  plt.show()
+
+CollatzConjecture(4000, 4005)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def GenerateSubset(n):
+
+  def helper(k):
+    if k==n+1:
+      slist.append(subset.copy())
+      return
+    subset.append(k)
+    helper(k+1)
+    subset.pop()
+    helper(k+1)
+
+
+  slist, subset = [], []
+  helper(1)
+  return sorted(slist, key=lambda x: len(x))
+
+GenerateSubset(5)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class UnionFind:
+
+  def __init__(self, n):
+    self.parent = [i for i in range(n)]
+    self.size = [1] * n
+
+  def find(self, val):
+    if self.parent[val] != val:
+      self.parent[val] = self.find(self.parent[val])
+    return self.parent[val]
+
+  def union(self, x, y):
+    xp, yp = self.find(x), self.find(y)
+    if xp != yp:
+      if self.size[xp] < self.size[yp]:
+        self.parent[xp] = yp
+        self.size[yp] += self.size[xp]
+      else:
+        self.parent[yp] = xp
+        self.size[yp] += self.size[xp]
+
+
+u = UnionFind(10)
+u.union(1, 2)
+u.union(2, 3)
+
+u.union(4, 5)
+u.union(5, 4)
+
+print(u.find(3))
+print(u.find(5))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def TargetSum(nums, t):
+  cache = {}
+  for idx, n in enumerate(nums):
+    if t-n in cache:
+      return [cache[t-n], idx]
+    cache[n] = idx
+  return [-1, -1]
+
+
+TargetSum([2,7,11,15], 9)
+```
+
+```{python}
+def FindMaxSpeacialSubstring(s):
+  pass
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def IsPlaindromeString(s):
+
+  def helper(l, r):
+    if l < 0 or r >= len(s): return False
+    while l<= r:
+      if s[r] != s[l]: return False
+      l, r = l+1, r-1
+    return True
+
+  return helper(0, len(s)-1)
+
+IsPlaindromeString("as")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import Counter
+
+def OddCounts(nums):
+  tval = 0
+  for n in nums:
+    tval += n & 1
+    print(tval)
+
+print("even & 1: ", 2&1)
+OddCounts([1, 0, 3, 2, 4, 6, 9])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def IsPossibleCombination(word, wlist):
+
+  def helper(start):
+    if start >= wlen:
+      return True
+
+    for cend in range(start, wlen+1):
+      cw = word[start:cend+1]
+      print("cword: ", cw)
+      if cw in wordSet:
+        if helper(cend+1):
+          print("--> found: ", cw)
+          return True
+
+    return False
+
+  wlen = len(word)
+  wordSet = set(wlist)
+  return helper(0)
+
+
+# wlist = ["wal", "marty", "test", "wa", "mar", "t"]
+# IsPossibleCombination("walmart", wlist)
+
+
+wlist = ["a", "b", "c", "d", "mar", "t"]
+IsPossibleCombination("abcd", wlist)
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class Node:
+
+  def __init__(self, k=None, v=None):
+    self.key = k
+    self.value = v
+    self.prev = None
+    self.next = None
+
+
+class LRUCache:
+
+  def __init__(self, capacity):
+    self.capacity = capacity
+    self.store = {}
+    self.left, self.right = Node(), Node()
+    self.left.next = self.right
+    self.right.prev = self.left
+
+  def PrintStore(self):
+    for k, v in self.store.items():
+      print("key: ", k, ", value: ", v.value)
+
+
+  def __remove(self, node):
+    prevNode, nextNode = node.prev, node.next
+    prevNode.next, nextNode.prev = nextNode, prevNode
+
+
+  def __insert(self, node):
+    prevNode, nextNode = self.right.prev, self.right
+    node.next, node.prev = nextNode, prevNode
+    prevNode.next = nextNode.prev = node
+
+  def Get(self, key):
+    if key not in self.store: return -1
+    vnode = self.store.get(key, None)
+    self.__remove(vnode)
+    self.__insert(vnode)
+    return vnode.value
+
+  def Put(self, k, v):
+    ## if key is already there remove it
+    if k in self.store:
+      node = self.store[k]
+      self.__remove(node)
+
+    self.store[k] = Node(k, v)
+    self.__insert(self.store[k])
+
+    ## if capacity is full evict the lru node
+    if len(self.store) > self.capacity:
+      enode = self.left.next
+      self.__remove(enode)
+      del self.store[enode]
+
+
+lru = LRUCache(10)
+lru.Get(10)
+lru.Put(1, 1)
+lru.Put(2, 2)
+lru.Put(3, 3)
+lru.Put(1, 4)
+lru.PrintStore()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import defaultdict, namedtuple
+import heapq
+
+class PageData:
+
+  def __init__(self, pName, freq=0):
+    self.pageName = pName
+    self.frequency = freq
+
+
+def FindTopKPages(plist):
+
+  pageCounts = defaultdict(int)
+  for pname in plist:
+
+    pageCounts[pname] += 1
+
+  cmp = lambda x: x.Frequency
+
+  pageHeap = []
+  pageData = namedtuple('PageData', ['Freq', "PageName"])
+  for p, c in pageCounts.items():
+    heapq.heappush(pageHeap, pageData(c, p))
+
+  return [heapq.heappop(pageHeap) for _ in range(len(pageHeap))]
+
+
+FindTopKPages([1, 1, 1, 2, 3, 1, 2, 1, 3])
+```
+
+```{python}
+import time
+import random
+
+class UniqueIDGenerator:
+
+  @staticmethod
+  def generate():
+    tstamp = int(time.time()).to_bytes(5, 'big')
+    randbytes = random.randbytes(5).to_bytes(5, 'big')
+
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import hashlib
+
+def generate_md5_hash(text):
+  """Generates the MD5 hash for the given text."""
+  encoded_text = text.encode('utf-8')  # Encode text into bytes
+  hash_object = hashlib.md5(encoded_text)
+  hex_digest = hash_object.hexdigest()
+  return hex_digest
+
+# Example usage
+text = "This is some text to hash."
+md5_hash = generate_md5_hash(text)
+print(f"MD5 hash: {md5_hash}")
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import namedtuple
+
+def ShowData(data):
+  i1, i2 = data.item1, data.item2
+  p = f'{i1}-{i2}'
+  print(p)
+
+data = namedtuple('Data', ['item1', 'item2'])
+data.item1 = "iPhone"
+data.item2 = "Samsung"
+ShowData(data)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindTwoMinValues(nums):
+  m1 = m2 = float("inf")
+  m1 = min(nums)
+  for n in nums:
+    if n > m1 and n < m2:
+      m2 = n
+
+  return m1, m2
+
+nums = [1, -2, 3, 4, 5, 6, 7, 8]
+FindTwoMinValues(nums)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class Graph:
+
+  def __init__(self, vcount=0):
+    self.vertices = vcount
+    self.edgeList = []
+
+  def addEdge(self, s, d, w):
+    self.edgeList.append([s, d, w])
+
+  def bellmanFord(self, src):
+    dist = [float("inf") for _ in range(self.vertices)]
+    dist[0] = src
+
+    for _ in range(self.vertices-1):
+      for s, d, w in self.edgeList:
+        if dist[s] != float("inf") and dist[s] + w  < dist[d]:
+          dist[d] = dist[s] + w
+
+    for s, d, w in self.edgeList:
+      if dist[s] != float("inf") and dist[s] + w  < dist[d]:
+        return {'failed' : 'cycle dectected in graph'}
+
+    return { i: dist[i] for i in range(self.vertices) }
+
+
+g = Graph(5)
+g.addEdge(0, 1, 5)
+g.addEdge(0, 2, 4)
+g.addEdge(1, 3, 3)
+g.addEdge(2, 1, 6)
+g.addEdge(3, 2, 2)
+
+g.bellmanFord(0)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class Node():
+
+  def __init__(self, val):
+    self.val = val
+    self.left = Node
+    self.right = Node
+
+def FindPath(node):
+
+  def dfs(node):
+    pass
+
+
+n = Node(5)
+print(n.val)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/', height: 35}
+import datetime
+
+def DateTime(y, m, d):
+  day = ["Monday", "Tue", "Wed", "Thur", "Fri", "Sat", "Sunday"]
+  d = datetime.date(y, m, d)
+  return day[d.weekday()]
+
+
+## day = 18, month = 7, year = 1999
+DateTime(1999, 7, 18)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import deque
+
+def FindTheShortestPath(matrix):
+
+  def getNeigh(r, c):
+    dirs = {
+        (0, 1), (0, -1), (1, 0), (-1, 0),
+        (1, 1), (1, -1), (-1, 1), (-1, -1)
+    }
+    for dr, dc in dirs:
+      nr, nc = r+dr, c+dc
+      if 0 <= nr < ROWS and 0 <= nc < COLS and matrix[nr][nc] == 0:
+        yield nr, nc
+
+  ROWS, COLS = len(matrix), len(matrix[0])
+  queue = deque([(0, 0, 1)])
+  visited = set()
+  visited.add((0, 0))
+
+  while queue:
+    r, c, dist = queue.popleft()
+    if r == ROWS-1 and c == COLS-1:
+      return dist
+    for nr, nc in getNeigh(r, c):
+      if (nr, nc) not in visited:
+        visited.add((nr, nc))
+        queue.append((nr, nc, dist+1))
+
+  return -1
+
+matrix = [[1,0,0],[1,1,0],[1,1,0]]
+matrix2 = [[0,1],[1,0]]
+FindTheShortestPath(matrix2)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+'''
+# Parking in vehicle inspection centers: DMV has vehicle inspection centers to inspect the quality of all new vehicles. You are charged to manage the vehicles coming in to inspection centers.
+
+It is required keep as much distance as possible between the new vehicle and its neighbors.
+
+You can assume that the parking lot is a straight line of individual parking spaces each numbered from 0 to N-1. As each vehicle comes in you want to assign it a parking spot. Let’s say you assigned parking space 0 to the very first car now to maximize the distance you’d assign the next car to space N-1. The next car now could be in the space N/2.
+
+Your problem now is to figure out the position at which the next incoming car should park. You can assume that the parking lot was empty when you started.
+
+
+Input:
+N = 20
+
+c1: 1
+c2: N-1
+c3: 1, 10, 20
+c4: 1, 10, 15, 20
+
+l   |  r
+1      20
+1. 5  10. 15 20
+1__6__4____3____5____2
+
+1_______3_______2
+
+heap : , (10, 20), (1, 5), (5, 10)
+0-N//2  N//2 - N
+
+
+'''
+
+import heapq
+
+
+class ParkingLot:
+
+    def __init__(self, N) -> None:
+        self.carCounts = 0
+        self.slots = N
+        self.positions = [0] * N
+        self.currentSlotSize = N
+        self.maxDisHeap = []
+        # heapq.heappush(self.maxDisHeap, (0, self.slots-1))
+
+
+    def display(self):
+      print("car ", self.carCounts, self.positions)
+
+
+    def AddCarToParking(self):
+        if self.carCounts == 0:
+            self.carCounts += 1
+            self.positions[0] = self.carCounts
+            return
+
+
+        if self.carCounts == 1:
+            self.carCounts += 1
+            self.positions[self.slots-1] = self.carCounts
+            maxDis = self.slots-1 // 2
+            heapq.heappush(self.maxDisHeap, (-maxDis, (0, self.slots-1)))
+            return
+
+
+        if self.maxDisHeap:
+            _, pos = heapq.heappop(self.maxDisHeap)
+            self.carCounts += 1
+            mid = (pos[1] + pos[0]) // 2
+            self.positions[mid] = self.carCounts
+
+            ## push the two new slot
+            p1 = (pos[0], mid)
+            p2 = (mid, pos[1])
+            heapq.heappush(self.maxDisHeap, (-mid, p1 ))
+            heapq.heappush(self.maxDisHeap, (-mid, p2 ))
+
+
+
+p = ParkingLot(20)
+p.AddCarToParking()
+p.display()
+
+
+p.AddCarToParking()
+p.display()
+
+p.AddCarToParking()
+p.display()
+
+p.AddCarToParking()
+p.display()
+
+p.AddCarToParking()
+p.display()
+
+
+p.AddCarToParking()
+p.display()
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+nums[-5:]
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import heapq
+
+nums = [11, 92, 33, 4, 55, 6, 7, 8, 9, 10]
+heapq.heapify(nums)
+print(nums)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+'''
+  It is not possible to transpose the matrix in place if the size
+  is not square.
+
+
+
+'''
+
+def TransposeGenerix(matrix):
+  '''
+    Basic idea is to swap the col with row
+  '''
+  ROWS = len(matrix)
+  COLS = len(matrix[0])
+  newMatrix = [[0 for _ in range(ROWS)] for _ in range(COLS)]
+  for i in range(ROWS):
+    for j in range(COLS):
+      newMatrix[j][i] = matrix[i][j]
+
+  return newMatrix
+
+
+def Transpose(matrix):
+  ROWS = len(matrix)
+  COLS = len(matrix[0])
+  for i in range(ROWS):
+    for j in range(i+1, COLS):
+      matrix[j][i], matrix[i][j] = matrix[i][j], matrix[j][i]
+
+
+def RevertMatrix(matrix):
+  ROWS = len(matrix)
+  COLS = len(matrix[0])
+  for i in range(ROWS):
+    for j in range(COLS//2):
+      matrix[i][j], matrix[i][COLS-1-j] = matrix[i][COLS-1-j], matrix[i][j]
+
+
+def printMatrix(matrix):
+  for row in matrix:
+    print(row)
+  print()
+
+# matrix = [
+#     [1,2,3],
+#     [4,5,6],
+#     [7,8,9],
+#     [10, 11, 12]
+# ]
+
+matrix2 = [
+    [1, 2, 3],
+    [4, 5, 6]
+]
+
+printMatrix(matrix2)
+newM = TransposeGenerix(matrix2)
+printMatrix(newM)
+RevertMatrix(newM)
+printMatrix(newM)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def GetCode(l):
+  return ord(l) - ord('A') + 1
+
+for i in range(26):
+  v = ord('A') + i
+  print(GetCode(chr(v)))
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import heapq
+
+class ParkingLot:
+    def __init__(self, N):
+        self.N = N
+        self.heap = []
+        # Initial segment from 0 to N-1
+        heapq.heappush(self.heap, (-N, 0, N-1)) # Using negative distance for max heap
+
+    def park(self):
+        if not self.heap:
+            raise Exception("No more spaces available")
+
+        # Get the largest segment
+        dist, start, end = heapq.heappop(self.heap)
+        dist = -dist
+
+        # Choose the middle point
+        if start == end:
+            pos = start
+        else:
+            pos = (start + end) // 2
+
+        # Create new segments
+        if pos > start:
+            heapq.heappush(self.heap, (-(pos - start), start, pos - 1))
+        if pos < end:
+            heapq.heappush(self.heap, (-(end - pos), pos + 1, end))
+
+        return pos
+
+# Example usage:
+N = 20  # Size of the parking lot
+parking_lot = ParkingLot(N)
+
+# Simulate parking cars
+for _ in range(N):
+    print(parking_lot.park())
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+nums[1:-1]
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from typing import List
+
+class Solution:
+    def maxOperations(self, nums: List[int]) -> int:
+
+        if len(nums) < 2: return 0
+        cache = {}
+        def helper(score, s=0, e=len(nums)-1):
+            if e <= s: return 0
+
+            if (s, e) in cache: return cache[(s, e)]
+
+            m1 = 1 + helper(score, s+2, e) if score == sum(nums[s:s+2]) else 0
+            m2 = 1 + helper(score, s, e-2) if score == sum(nums[e-1:e+1]) else 0
+            m3 = 1 + helper(score, s+1, e-1) if score == nums[s] + nums[e] else 0
+
+            cache[(s, e)] = max(m1, m2, m3)
+            return cache[(s, e)]
+
+        s1 = helper(sum(nums[:2]))
+        s2 = helper(sum(nums[-2:]))
+        s3 = helper(nums[0] + nums[1])
+
+        return max(
+            s1, s3, s2
+        )
+
+s = Solution()
+s.maxOperations([1,2,3,4,5,6,7,8,9,10])
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def GetGCD(a, b):
+  a, b = min(a, b), max(a, b)
+  while b:
+    a, b = b, a%b
+  return a
+
+def GetLCM(a, b):
+  return (a*b) // GetGCD(a, b)
+
+GetLCM(4, 6)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class TrieNode():
+
+  def __init__(self):
+    self.children = {}
+    self.isWord = False
+
+class Trie():
+
+  def __init__(self):
+    self.root = TrieNode()
+
+  def Insert(self, word):
+    '''
+      inserts the word in the Trie
+    '''
+    node = self.root
+    for c in word:
+      if c not in node.children:
+        node.children[c] = TrieNode()
+      node= node.children[c]
+    node.isWord = True
+
+  def Search(self, word):
+    node = self.root
+    for c in word:
+      if c not in node.children:
+        return False
+      node = node.children[c]
+    return node.isWord == True
+
+  def StartsWith(self, prefix):
+    node = self.root
+    words = []
+
+    for c in prefix:
+      if c not in node.children:
+        return words
+      node = node.children[c]
+
+    def collectAllWords(tnode, cword):
+      if tnode.isWord:
+        words.append(cword)
+      for c, cnode in tnode.children.items():
+         collectAllWords(cnode, cword + c)
+      return
+
+    collectAllWords(node, prefix)
+    return words
+
+
+trie = Trie()
+trie.Insert("app")
+trie.Insert("apple")
+trie.Insert("apps")
+trie.Insert("appdata")
+trie.Insert("nextappdata")
+print(trie.Search("app"))
+print(trie.StartsWith("app"))
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindMinOps(nums, x):
+
+  def helper(cnum, l, r):
+    if cnum==0:
+      return 0
+
+    if cnum < 0: return 0
+
+     ## choose left and explore
+    lval, lops = nums[l], float("inf")
+    if lval <= cnum and l <= r:
+      lops = helper(cnum-lval, l+1, r)
+
+    ## choose right to explore
+    rval, rops = nums[r], float("inf")
+    if rval <= cnum and l <= r:
+      rops = helper(cnum-rval, l, r-1)
+
+    return min(lops, rops) + 1
+
+  return helper(x, 0, len(nums)-1)
+
+FindMinOps([1, 1, 4, 2, 3], 5)
+FindMinOps([5, 4, 3, 2, 1], 15)
+
+## ([3, 2, 20, 1, 1, 3], 10)
+FindMinOps([3, 2, 20, 1, 1, 3], 10)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+'''
+First scenario:
+    1. Get the whole list from each server
+    2. O(N), n = total_nums
+    3. Heap: O(N log k), k = no. of servers
+
+Second Scenario: Not enough memory
+    Ouput: store it in other server disk
+    1.
+
+'''
+
+import heapq
+
+class Server():
+
+    def __init__(self, listOfNums):
+        self.data = {}
+        for i, nums in enumerate(listOfNums):
+            self.data[i] = nums
+        self.size = len(listOfNums)
+
+    def GetServerData(self, sname):
+        return self.data.get(sname, [])
+
+    def GetServerList(self):
+        return self.size
+
+
+class ExternalSort():
+
+    def __init__(self, sutil):
+        self.finalList = []
+        self.heapData = []
+        self.serverUtil = sutil
+
+
+    def GetSortedData(self):
+        serverList = self.serverUtil.GetServerList()
+        serverData = []
+        for i in range(serverList):
+          d = self.serverUtil.GetServerData(i)
+          serverData.append(
+              iter(d)
+          )
+
+        for s, n in enumerate(serverData):
+          heapq.heappush(self.heapData, (next(n), s))
+
+        while self.heapData:
+          n, sId = heapq.heappop(self.heapData)
+          self.finalList.append(n)
+          d = next(serverData[sId], None)
+          if d != None:
+            heapq.heappush(self.heapData, (d, sId))
+
+        return self.finalList
+
+s = Server(
+    [[1, 2, 3, 4],[3, 5, 6, 7],[5, 7, 8, 10]]
+)
+
+s2 = Server(
+    [[1, 12, 13, 14],[3],[2, 2, 2, 2]]
+)
+
+es = ExternalSort(s2)
+print(es.GetSortedData())
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def MinOps(nums, x):
+
+  def helper(ctotal, l, r):
+    if ctotal == 0:
+      return 0
+    if ctotal < 0:
+      return float("inf")
+
+    ## choose left and explore
+    lval, lops = nums[l], float("inf")
+    if l <= r and lval <= ctotal:
+      lops = 1 + helper(ctotal-lval, l+1, r)
+
+    ## choose right and explore
+    rval, rops = nums[r], float("inf")
+    if l <= r and rval <= ctotal:
+      rops = 1 + helper(ctotal-rval, l, r-1)
+
+    return min(lops, rops)
+
+  return helper(x, 0, len(nums)-1)
+
+a1 = MinOps([3, 2, 20, 1, 1, 3], 10)
+print(a1)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+'''
+
+  There are two ops :
+  1. Copy All: You can copy all the characters present on the screen (a partial copy is not allowed).
+  2. Paste: You can paste the characters which are copied last time. This is basically (copy+paste)
+
+  options:
+  >
+
+'''
+
+def FindMinKeyOps(n):
+  memo = {}
+
+  def helper(slen, clen):
+    '''
+      slen: len of the current the string
+      clen: len of the copy string in the clipboard
+    '''
+
+    if slen == n: return 1
+    if slen > n: return float("inf")
+
+    if (slen, clen) in memo: return memo[(slen,clen)]
+
+    copyPaste = float("inf")
+    if slen != clen:
+      copyPaste = 2 + helper(slen*2, slen)
+
+    ## only paste
+    paste = 1 + helper(slen+clen, clen)
+
+    minOps = min(
+        copyPaste,
+        paste
+    )
+    memo[(slen, clen)] = minOps
+    return memo[(slen, clen)]
+
+  if n == 1 : return 0
+  return helper(1, 1)
+
+
+# for i in range(0, 500, 25):
+#   print(FindMinKeyOps(i+3))
+
+FindMinKeyOps(200)
+```
+
+```{python}
+def FindMinRepeats(a, b):
+  s1, s2 = len(a), len(b)
+  if s2 < s1: return -1
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+
+import heapq
+
+def MergeSortedArrays(alist):
+  minheap = []
+  sortedArrays = [ iter(i) for i in alist if i != None]
+  finalSortedList = []
+
+  ## init the heap with the first element from each list
+  for ilist in sortedArrays:
+    d = next(ilist, None)
+    heapq.heappush(minheap, (d, ilist))
+
+  ## pop and insert the next in the line from each list
+  while minheap:
+    n, clist = heapq.heappop(minheap)
+    finalSortedList.append(n)
+    nextData = next(clist, None)
+    if nextData:
+      heapq.heappush(minheap, (nextData, clist))
+
+  return finalSortedList
+
+s1 = [
+    [1, 2, 3, 4, 5],
+    [12, 13, 14, 15, 16],
+    [90, 91, 92]
+]
+MergeSortedArrays(s1)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+d = [
+    [1, 2, 3, 4],
+    [],
+    [23, 34]
+]
+d = [ iter(i) for i in d if i != []]
+for i in d:
+  s = next(i)
+  print(s)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindLongestIncreasingSeq(nums):
+
+  N = len(nums)-1
+  def helper(cidx, tlen):
+    if cidx == N:
+      return tlen
+
+    clen = 0
+    for idx in range(cidx+1, N):
+      if nums[idx] > nums[cidx]:
+        clen = max(clen, helper(idx+1, tlen+1))
+    return clen
+
+
+  return helper(0, 1)
+
+
+nums = [4, 5, 6, 7]
+FindLongestIncreasingSeq(nums)
+
+
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import threading
+import time
+
+
+class ThreadSafeMap():
+
+  def __init__(self):
+    self.dataMap = {}
+    self.lock = threading.Lock()
+
+  def set(self, k=None, v=None):
+    print("adding {0} and {1}".format(k, v))
+    with self.lock:
+      self.dataMap[k] = v
+
+  def get(self, k):
+    with self.lock:
+      return self.dataMap.get(k, None)
+
+  def remove(self, k):
+    with self.lock:
+      if k in self.dataMap:
+        del self.dataMap[k]
+
+
+def TestThreadSafeMap(count):
+  tmap = ThreadSafeMap()
+
+  def writeData(count):
+    for c in range(count):
+      time.sleep(1)
+      tmap.set(c, c)
+
+  def readData(count):
+    for c in range(count):
+      time.sleep(1)
+      d = tmap.get(c)
+      print("key : {0}, data: {1}".format(c, d))
+
+  t1 = threading.Thread(target=writeData, args=[count])
+  t2 = threading.Thread(target=readData, args=[count])
+
+  t1.start()
+  t2.start()
+
+  t1.join()
+  t2.join()
+
+TestThreadSafeMap(5)
+
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+from collections import deque
+
+class ParkingLot():
+
+  def __init__(self, size=10):
+    self.slots = size
+    self.parkinglot = ["-" for i in range(size)]
+    self.queue = deque()
+    self.queue.append((0, 0))
+    self.queue.append((size-1, size-1))
+    self.queue.append((1, size-2))
+
+
+  def GetNextSlot(self):
+    '''
+      return next slot to be used for parking
+    '''
+    if not self.queue:
+      return "error : no more slots available"
+
+    l, r = self.queue.popleft()
+    if l == r:
+      self.parkinglot[l] = "P"
+      return l
+
+    m = l + (r-l)//2
+
+    ## handle two consecutive slots
+    if abs(r-l) == 1:
+      self.queue.append((r, r))
+      self.parkinglot[l] = "P"
+      return l
+
+    if abs(r-l) == 2:
+      self.queue.append((l, l))
+      self.queue.append((r, r))
+      self.parkinglot[m] = "P"
+      return m
+
+    if abs(r-l) == 3:
+      self.queue.append((l, l))
+      self.queue.append((m+1, r))
+      self.parkinglot[m] = "P"
+      return m
+
+
+    firstHalf, secondHalf = (l, m-1), (m+1, r)
+    self.queue.append(firstHalf)
+    self.queue.append(secondHalf)
+    self.parkinglot[m] = "P"
+    return m
+
+
+
+psize = 20
+p = ParkingLot(psize)
+for i in range(psize):
+  print("parking at slot : ", p.GetNextSlot())
+  print(p.parkinglot)
+  print()
+```
+
+```{python}
+w = ["word?", "apple!", "word?"]
+p = ["?", "!"]
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import math
+def FindPrimesInRange(n):
+
+  primes = [False, False] + [True] * (n-2)
+  nsqrt = int(math.sqrt(n) + 1)
+
+  for num in range(2, nsqrt):
+    if primes[num]:
+      for mul in range(num*num, n, num):
+        primes[mul] = False
+
+  return [i for i, v in enumerate(primes) if v]
+
+FindPrimesInRange(10)
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindSqrt(n):
+
+  def helper(t):
+    l, h = 0, t
+    while l <= h:
+      m = l + (h-l)//2
+      if m*m==t: return m
+      elif m*m > t:
+        h = m - 1
+      else:
+        l = m + 1
+    return h
+
+  return helper(n)
+
+for i in range(8, 22):
+  print("i : ", FindSqrt(i), math.sqrt(i))
+
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+import heapq
+
+class OnlineMedian():
+
+  def __init__(self):
+    self.left = [] ## maxHeap
+    self.right = [] ## minHeap
+
+  def Add(self, num):
+    heapq.heappush(self.left, -1 * num)
+    heapq.heappush(self.right, -1 * heapq.heappop(self.left))
+
+    if len(self.right) > len(self.left):
+      heapq.heappush(self.left, -1 * heapq.heappop(self.right))
+
+  def GetMedian(self):
+    return -1 * self.left[0] if len(self.left) > len(self.right) else (self.right[0] - self.left[0])/2
+
+om = OnlineMedian()
+om.Add(1)
+om.Add(2)
+om.Add(3)
+om.Add(3)
+om.Add(3.5)
+om.Add(3.6)
+om.Add(13)
+om.Add(13)
+print(om.GetMedian())
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+def FindMissingRange(nums):
+  res = []
+
+  if not nums: return "(1...1000)"
+
+  start, end = 0, 1000
+  res = []
+  N = len(nums)
+
+  if start < nums[0]:
+    res.append([start, nums[0]-1])
+
+  for i in range(N-1):
+    if nums[i+1] - nums[i] <= 1:
+      continue
+    res.append([nums[i]+1, nums[i+1]-1])
+
+  if end > nums[N-1]:
+    res.append([nums[N-1], end])
+
+  return res
+
+FindMissingRange([1, 2, 3, 4, 20, 30, 40, 99, 1000])
+```
+
+```{python}
+from sortedcontainers import SortedDict
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+class MenuRecord():
+
+  def __init__(self, id, name, itemType, price=None, subItems=[]):
+    self.id = id
+    self.name = name
+    self.itemType = itemType
+    self.price = price
+    self.subItems = subItems
+
+class MenuParser():
+
+  def __init__(self, menuStream):
+    self.menus = []
+    self.getNextItem = self.menuStream.get_next()
+
+  def parseSingleRecord(self):
+    pass
+
+class MenuStream():
+
+  def __init__(self):
+    self.data = """
+    1
+    Italian
+    CAT
+    2
+    3
+    --
+    2
+    Sphagetti
+    DISH
+    8.90
+    4
+    5
+    --
+    3
+    Salad
+    DISH
+    15.0
+    --
+    4
+    Cheese
+    Option
+    5.0
+    --
+    5
+    Dressing
+    Option
+    6.0
+    None
+    """
+
+  def get_next(self):
+    lines = self.data.split()
+    print(lines)
+
+
+mstr = MenuStream()
+mstr.get_next()
+
+```
+
+```{python}
+#| colab: {base_uri: 'https://localhost:8080/'}
+l = [[1,2],[3,4],[5,6]]
+lm = [i for i, j in l]
+print(lm)
+```
+
+## Bipartite Graph problems
+
+Def: Given a graph we can divide the graphs into two independent groups such that every edge is between only two groups    
+
+Other def:
+Two colorable    
+There is no cycle with odd length
+
+Usually the problems are related to add maximum edges between the two groups         
+MCBM : Maximum Cardinality Bipartite Matching.    
+
+
+
+
+Alogorithms:
+
+1. Dfs Hopcroft-karp
+
